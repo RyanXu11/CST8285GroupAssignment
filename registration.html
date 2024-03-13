@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/validation.js" defer></script> 
+    <title>Registration</title>
+</head>
+<body>
+    <form id="registrationForm" action="php/registration.php" method="POST">
+        <div class="textfield">
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" required>
+        </div>
+        <div class="textfield">
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" required>
+        </div>
+        
+        <div class="textfield">
+            <label for="nickName">Nick Name:</label>
+            <input type="text" id="nickName" name="nickName" required>
+        </div>
+    
+        <div class="textfield">
+            <label for="relationship">Relationship:</label>
+            <select id="relationship" name="relationship" required>
+                <option value="dad">Dad</option>
+                <option value="mom">Mom</option>
+                <option value="daughter">Daughter</option>
+                <!-- Add more relationship options as needed -->
+            </select>
+        </div>
+
+        <div class="gender">
+            <label for="gender">Gender:</label>
+            <input type="radio" id="male" name="gender" value="male">
+            <label for="male">Male</label>
+            <input type="radio" id="female" name="gender" value="female">
+            <label for="female">Female</label>
+        </div>
+
+        <div class="textfield">
+            <label for="pass">Password</label>
+            <input type="password" name="pass" id="pass" placeholder="Password">
+        </div>
+
+        <div class="textfield">
+            <label for="pass2">Re-type Password</label>
+            <input type="password" id="pass2" placeholder="Confirm Password">
+        </div>
+
+        <button type="submit">Register</button>
+        <button type="reset">Reset</button>    
+
+    </form>
+</body>
+</html>
