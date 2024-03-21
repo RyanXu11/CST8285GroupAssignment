@@ -1,0 +1,21 @@
+
+#newVendor {
+    /* margin-right: auto; */
+    /* text-align: left; */
+    font-size: 1.1em;
+}
+
+#newVendorForm div{
+    display: flex;
+    justify-content: center;
+    gap:5px;
+}
+
+#newVendorForm div label{
+    flex: 1;
+}
+
+#newVendorForm div input{
+    flex: 2.5;
+}
+

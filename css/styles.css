@@ -3,13 +3,18 @@ body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     align-items: center;
     height: 100vh;
 }
 
+h1 {
+    margin-top: 0;
+}
+
 form {
+    display: flex;
     background-color: #fff;
     padding: 20px;
     border-radius: 5px;

@@ -6,6 +6,24 @@
     <title>Document</title>
 </head>
 <body>
-    
+
+        <button onclick=refreshData()>Say Hello</button>
+        <div id="content" />
+
+    <script type="text/javascript">
+        //   var display = document.getElementById("content");
+          var xmlhttp = new XMLHttpRequest();
+          xmlhttp.open("GET", "hello.php");
+
+        //   xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          xmlhttp.send();
+          console.log("This is another test:\n");
+          xmlhttp.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+                var options = this.responseText;
+                console.log("This is options:\n", options);
+            } 
+          }
+      </script>
 </body>
 </html>

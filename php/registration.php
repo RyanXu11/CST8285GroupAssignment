@@ -1,16 +1,8 @@
 <?php
-// Database information
-$host = 'localhost:3306'; // server
-$username = 'xuUser'; // user
-$password = 'xuPassword123'; // password
-$database = 'cst8285_group'; // database
+include 'functions.php';
 
-try {
-    // create connection
-    $conn = new PDO("mysql:host=$host;dbname=$database", $username, $password);
-
-    // set PDO error mode as exception
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+   // create connection
+    $conn = open_database_connection();
 
     echo "Connection successfully\n";
 
@@ -31,9 +23,20 @@ try {
         echo "No tables found in the database.\n";
     }
 
+    // Query to read a table
+    // $query = "SELECT * FROM vendors;";
+    // $stmt = $conn->query($query);
+
+    // Fetch the results
+    // $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // print_r($rows);
+    
+    $query = "SELECT VendorID, VendorName FROM Vendors";
+    $stmt = $conn->query($query);
+    $rows = $stmt->fetch(PDO::FETCH_ASSOC);
+    print_r($rows);
+
     // close the connection
-    $conn = null;
-} catch (PDOException $e) {
-    echo "Connection failure: " . $e->getMessage();
-}
+    // $conn = null;
+    close_database_connection($conn)
 ?>

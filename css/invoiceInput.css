@@ -1,0 +1,111 @@
+
+.formPart1InvoiceVendorInfo {
+    width: 90%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 4列等宽 */
+    grid-gap: 5px;
+    /* grid-row-gap: 5px; */
+}
+
+.formPart1InvoiceVendorInfo input {
+    background-color: rgb(246, 239, 239);
+}
+
+.formPart2InvoiceHead {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    background-color:aquamarine;
+}
+
+.row-item{
+    width: 30%;
+    padding: 5px;
+    text-align: right;
+    flex: 1;
+}
+
+.formPart3InvoiceProductList {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.productLabel, .productInput{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 5% 30% 25% 10% 5% 15% 7%; 
+    grid-gap: 2px; 
+    justify-content: space-between;
+}
+
+.formPart4InvoiceFoot {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+
+/* 每个网格项的样式 */
+.grid-item {
+    width: 98%;
+    background-color: #f0f0f0;
+    padding: 5px;
+    text-align: right;
+}
+
+/* 每行的样式 */
+.row-1 {
+    grid-column: span 1; /* 跨1列 */
+}
+
+.row-2 {
+    grid-column: span 2; /* 跨2列 */
+}
+
+.row-3 {
+    grid-column: span 3; /* 跨3列 */
+}
+
+.row-4 {
+    grid-column: span 4; /* 跨3列 */
+}
+.row-5 {
+    grid-column: span 5; /* 跨3列 */
+}
+
+.productInput input, 
+.productInput select {
+    height: 2em;
+    padding: 5px;
+    margin-bottom: 1px;
+    box-sizing: border-box;
+}
+
+.invoice-foot{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center; 
+    margin:5px;
+    gap: 5px;
+}
+
+.total {
+    width: 20%;
+}
+
+.formPart1InvoiceVendorInfo div:first-child,
+.formPart1InvoiceVendorInfo div:first-child select,
+.formPart1InvoiceVendorInfo div:first-child input {
+    /* margin-right: auto; */
+    text-align: left;
+    font-size: 1.1em;
+}
+
+textarea {
+    width: 90%;
+}

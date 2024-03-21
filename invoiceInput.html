@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/invoiceInput.css">
+    <script src="js/invoice.js" defer></script> 
+    <title>Invoice Form</title>
+</head>
+<body>
+    <header>
+        <h1 id="header">Enter Invoice Information</h1>
+        <nav>
+            <a href="index.html" class="nav-link  current" id="index">Home</a>
+            <a href="invoiceInput.html" class="nav-link" id="resume">Invoice Input</a>
+            <a href="invoiceSearch.html" class="nav-link" id="courses">Invoice Search</a>
+            <a href="productPrice.html" class="nav-link" id="contact">Product Price Trend</a>
+        </nav>
+    </header>
+    <form action="php/invoice.php" method="post">
+        <div class="formPart1InvoiceVendorInfo">
+            <div class="grid-item row-3" id="vendorname">
+                <label for="vendorSelect">Existing Vendor or New</label>
+                <select id="vendorSelect" name="vendorSelect">
+                    <option value="0">New Vendor</option>
+                </select>
+                <button type="button" id="newVendor">New Vendor</button>
+            </div>
+            
+            <div class="grid-item row-1">
+                <label for="gstno">GST No</label>
+                <input type="text" name="gstno" id="gstno" readonly>
+            </div>
+    
+            <div class="grid-item row-1">
+                <label for="address">Address</label>
+                <input type="text" name="address" id="address" readonly>
+            </div>
+            
+            <div class="grid-item row-1">
+                <label for="city">City</label>
+                <input type="text" name="city" id="city" readonly>
+            </div>
+            
+            <div class="grid-item row-1">
+                <label for="province">Province</label>
+                <input type="text" name="province" id="province" readonly>
+            </div>
+            
+            <div class="grid-item row-1">
+                <label for="country">Country</label>
+                <input type="text" name="country" id="country" value="Canada" readonly>
+            </div>
+            
+            <div class="grid-item row-1">
+                <label for="zip">ZIP</label>
+                <input type="text" name="zip" id="zip" readonly>
+            </div>
+            
+            <div class="grid-item row-1">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" readonly>
+            </div>
+        
+            <div class="grid-item row-1">
+                <label for="phone">Phone</label>
+                <input type="text" name="phone" id="phone" readonly>
+            </div>
+    
+            <div class="grid-item row-1">
+                <label for="membership">Membership</label>
+                <input type="text" name="membership" id="membership" readonly>
+            </div>
+        </div>
+
+        <div class="formPart2InvoiceHead">    
+            <div class="row-item">
+                <label for="invoiceNumber">Invoice Number</label>
+                <input type="text" name="invoiceNumber" id="invoiceNumber">
+            </div>
+
+            <div class="row-item">
+                <label for="transactionDate">Transaction Date</label>
+                <input type="date" name="transactionDate" id="transactionDate">
+            </div>
+            
+            <div class="row-item">
+                <label for="transactionTime">Transaction Time</label>
+                <input type="time" name="transactionTime" id="transactionTime">
+            </div>
+        </div>
+
+        <div class="formPart3InvoiceProductList" id="formPart3InvoiceProductList">
+            <div class="productLabel">
+                <label>Line#</label>
+                <label for="selectVendorProductId1" id="vendorProductIdLabel">Vendor Product ID</label>
+                <label for="productName1">Product Name</label>
+                <label for="quantity1">Quantity</label>
+                <label for="unit1">Unit</label>
+                <label for="price1">Price</label>
+                <label for="taxType1">TaxType</label>
+            </div>
+            <div class="productInput">
+                <label id="line1"> 1</label>
+                <div class="vendorProductId">
+                    <select id="selectVendorProductId1" name="selectVendorProductId">
+                        <option value="0">New Product</option>
+                    </select>
+                    <input type="text" id="inputNewVendorProductId1" name="inputNewVendorProductId">
+                </div>
+                <div class="validation">
+                    <input type="text" name="productName" id="productName1">
+                    <p class="warning"></p>
+                </div>
+                <div class="validation">
+                    <input type="text" class="number" name="quantity" id="quantity1" value="1">
+                    <p class="warning"></p>
+                </div>                
+                <select id="unit1" name="unit">
+                    <option value="0">  </option>
+                    <option value="kg">kg</option>
+                    <option value="lb">lb</option>
+                    <option value="l">L</option>
+                    <option value="ml">ml</option>
+                </select>
+                <div class="validation">
+                    <input type="text" class="number" name="price" id="price1">
+                    <p class="warning"></p>
+                </div>
+                <select id="taxType1" name="taxType">
+                    <option value="0">  </option>
+                    <option value="H">H</option>
+                    <option value="G">G</option>    
+                </select>
+            </div>
+        </div>
+
+        <div class="formPart4InvoiceFoot">
+            <div class="invoice-foot">
+                <button type="button" id="addInvoiceItem">Add Transaction Item</button>
+                <button type="button" id="removeProduct">Delete the Last Item</button>
+            </div>  
+
+            <div class="invoice-foot">
+                <label for="subtotal">SUBTOTAL</label>
+                <input type="text" class="total" name="subtotal" id="subtotal">
+            </div>
+
+            <div class="invoice-foot">
+                <label for="totalTax">TAX</label>
+                <input type="text" class="total" name="totalTax" id="totalTax">
+            </div>
+    
+            <div class="invoice-foot">
+                <label for="total">TOTAL</label>
+                <input type="text" class="total" name="total" id="total">
+            </div>
+    
+            <div class="invoice-foot">
+                <label for="description">Invoice Description: </label>
+                <textarea name="description" id="description"></textarea>
+            </div>
+    
+            <div class="invoice-foot">
+                <button type="submit" id="submit">Submit</button>
+                <button type="reset" id="reset">Reset</button>
+            </div>       
+        </div>
+ 
+    </form>
+
+    <footer>
+        <nav>
+            <a href="#header">Top of Page</a>
+        </nav>
+        <p>Coded by Ryan Xu</p>
+    </footer>
+</body>
+</html>
