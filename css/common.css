@@ -1,5 +1,6 @@
 body {
     font-family: Arial, sans-serif;
+    /* Other color: #ddd78d;  */
     background-color: #f4f4f4;
     padding: 0;
     display: flex;
@@ -15,7 +16,7 @@ h1 {
 form {
     display: flex;
     flex-direction: column;
-    background-color: #fff;
+    background-color: ; //#fff;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -31,7 +32,7 @@ button {
     border-radius: 5px;
 }
 
-button[id="removeProduct"], [type="reset"]{
+button[id="removeProduct"], [type="reset"], [id="delete"]{
     background-color: red;
 }
 

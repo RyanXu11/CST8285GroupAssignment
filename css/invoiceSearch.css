@@ -1,0 +1,101 @@
+#formPart1 {
+    display: flex;
+    justify-content: space-between;
+    /* background-color:rgb(231, 245, 240); */
+}
+
+.row-item{
+    /* width: 30%; */
+    padding: 5px;
+    text-align: right;
+    flex: 1;
+}
+
+#formPart2{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* align-items: flex-end; */
+}
+
+.grid-item {
+    width: 100%;
+    background-color: #f0f0f0;
+    padding: 5px;
+    text-align: left;
+}
+
+/* for grid row */
+.row-1 {
+    grid-column: span 1; /* span 1 columns */
+}
+
+.row-2 {
+    grid-column: span 2; /* span 2 columns */
+}
+
+.row-3 {
+    grid-column: span 3; /* span 3 columns */
+}
+
+.row-4 {
+    grid-column: span 4; /* span 4 columns */
+}
+.row-7 {
+    grid-column: span 8; /* span 8 columns */
+}
+
+.TransactionLabel, .TransactionInput{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 15% 15% 10% 10% 5% 5% 5% 10% 10%; 
+    grid-gap: 5px; 
+    justify-content: space-between;
+    text-align: left;
+}
+
+.productLabel, .productList{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 5% 15% 15% 10% 5% 10% 7% 15%; 
+    grid-gap: 1px; 
+    justify-content: space-between;
+}
+
+table {
+    border-collapse: collapse;
+    vertical-align: top;
+  }
+  
+table.list {
+    width: 100%;
+}
+  
+table.list tr td {
+    border: 1px solid #999999;
+}
+  
+table.list tr th {
+    border: 1px solid #21b7c5;
+    background: #21b7c5;
+    color: white;
+    text-align: left;
+}
+
+td input{
+    border: none;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+input.editable {
+    background-color: rgb(246, 158, 174);
+}
+
+button.save{
+    background:red;
+}
+
+p.memory{
+    display: none;
+}

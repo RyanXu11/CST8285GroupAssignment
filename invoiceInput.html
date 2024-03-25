@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/invoiceInput.css">
-    <script src="js/invoice.js" defer></script> 
+    <script type="module" src="js/invoiceInput.js" defer></script> 
     <title>Invoice Form</title>
 </head>
 <body>
@@ -18,16 +18,21 @@
             <a href="productPrice.html" class="nav-link" id="contact">Product Price Trend</a>
         </nav>
     </header>
-    <form action="php/invoice.php" method="post">
-        <div class="formPart1InvoiceVendorInfo">
-            <div class="grid-item row-3" id="vendorname">
-                <label for="vendorSelect">Existing Vendor or New</label>
+    <form id="vendorInformation">
+        <fieldset class="fieldset" id="fieldset1">
+            <div class="grid-item row-2" id="vendorNameSelectDiv">
+                <label for="vendorSelect">Existing Vendors</label>
                 <select id="vendorSelect" name="vendorSelect">
-                    <option value="0">New Vendor</option>
+                    <option value="0">Select Or 'New' -></option>
                 </select>
                 <button type="button" id="newVendor">New Vendor</button>
+                
             </div>
-            
+            <div class="grid-item row-2" id="vendorNameInputDiv">
+                <label for="inputVendorName">New Vendor</label>
+                <input type="text" name="vendorName" id="inputVendorName">
+            </div>
+
             <div class="grid-item row-1">
                 <label for="gstno">GST No</label>
                 <input type="text" name="gstno" id="gstno" readonly>
@@ -48,10 +53,10 @@
                 <input type="text" name="province" id="province" readonly>
             </div>
             
-            <div class="grid-item row-1">
+            <!-- <div class="grid-item row-1">
                 <label for="country">Country</label>
                 <input type="text" name="country" id="country" value="Canada" readonly>
-            </div>
+            </div> -->
             
             <div class="grid-item row-1">
                 <label for="zip">ZIP</label>
@@ -72,9 +77,10 @@
                 <label for="membership">Membership</label>
                 <input type="text" name="membership" id="membership" readonly>
             </div>
-        </div>
-
-        <div class="formPart2InvoiceHead">    
+        </fieldset>
+    </form>
+    <form id="invoiceDetail">
+        <fieldset class="fieldset" id="fieldset2">
             <div class="row-item">
                 <label for="invoiceNumber">Invoice Number</label>
                 <input type="text" name="invoiceNumber" id="invoiceNumber">
@@ -89,9 +95,9 @@
                 <label for="transactionTime">Transaction Time</label>
                 <input type="time" name="transactionTime" id="transactionTime">
             </div>
-        </div>
+        </fieldset>
 
-        <div class="formPart3InvoiceProductList" id="formPart3InvoiceProductList">
+        <fieldset class="fieldset" id="fieldset3">
             <div class="productLabel">
                 <label>Line#</label>
                 <label for="selectVendorProductId1" id="vendorProductIdLabel">Vendor Product ID</label>
@@ -134,9 +140,9 @@
                     <option value="G">G</option>    
                 </select>
             </div>
-        </div>
+        </fieldset>
 
-        <div class="formPart4InvoiceFoot">
+        <fieldset class="fieldset" id="fieldset4">
             <div class="invoice-foot">
                 <button type="button" id="addInvoiceItem">Add Transaction Item</button>
                 <button type="button" id="removeProduct">Delete the Last Item</button>
@@ -165,16 +171,15 @@
             <div class="invoice-foot">
                 <button type="submit" id="submit">Submit</button>
                 <button type="reset" id="reset">Reset</button>
-            </div>       
-        </div>
- 
+            </div>    
+        </fieldset>
     </form>
 
     <footer>
         <nav>
             <a href="#header">Top of Page</a>
         </nav>
-        <p>Coded by Ryan Xu</p>
+        <p>Coded by Ryan Xu & Yizhen Xu</p>
     </footer>
 </body>
 </html>

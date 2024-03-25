@@ -1,32 +1,48 @@
+/*
+Assignment: Group Assignment
+Authors: Yizhen Xu, Ryan Xu
+*/
+.fieldset {
+    /* width: 99%; */
+}
 
-.formPart1InvoiceVendorInfo {
-    width: 90%;
+#fieldset1 {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 4列等宽 */
-    grid-gap: 5px;
+    grid-template-columns: repeat(4, 1fr);
+    justify-items: start;
+    /* grid-gap: 5px; */
     /* grid-row-gap: 5px; */
+    /* background-color:rgb(231, 245, 240); */
+    /* border: 1px solid black; */
 }
 
-.formPart1InvoiceVendorInfo input {
-    background-color: rgb(246, 239, 239);
+#vendorNameSelectDiv label,
+#vendorNameInputDiv label {
+    text-align: left;
+    font-size: 1.1em;
 }
 
-.formPart2InvoiceHead {
-    width: 90%;
+#vendorNameSelectDiv,
+#vendorNameInputDiv {
+    /* margin-right: auto; */
+    /* text-align: left; */
+    font-size: 1.1em;
+}
+
+#fieldset2 {
     display: flex;
     justify-content: space-between;
-    background-color:aquamarine;
+    background-color:rgb(231, 245, 240);
 }
 
 .row-item{
-    width: 30%;
+    /* width: 30%; */
     padding: 5px;
     text-align: right;
     flex: 1;
 }
 
-.formPart3InvoiceProductList {
-    width: 90%;
+#fieldset3 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -35,13 +51,12 @@
 .productLabel, .productInput{
     width: 100%;
     display: grid;
-    grid-template-columns: 5% 30% 25% 10% 5% 15% 7%; 
-    grid-gap: 2px; 
+    grid-template-columns: 5% 25% 25% 10% 5% 15% 7%; 
+    grid-gap: 5px; 
     justify-content: space-between;
 }
 
-.formPart4InvoiceFoot {
-    width: 90%;
+#fieldset4 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -49,32 +64,33 @@
 }
 
 
-/* 每个网格项的样式 */
+/* For every grid-teim */
 .grid-item {
-    width: 98%;
+    width: 100%;
     background-color: #f0f0f0;
     padding: 5px;
     text-align: right;
+    border: 1px solid blue;
 }
 
-/* 每行的样式 */
+/* for grid row */
 .row-1 {
-    grid-column: span 1; /* 跨1列 */
+    grid-column: span 1; /* span 1 columns */
 }
 
 .row-2 {
-    grid-column: span 2; /* 跨2列 */
+    grid-column: span 2; /* span 2 columns */
 }
 
 .row-3 {
-    grid-column: span 3; /* 跨3列 */
+    grid-column: span 3; /* span 3 columns */
 }
 
 .row-4 {
-    grid-column: span 4; /* 跨3列 */
+    grid-column: span 4; /* span 4 columns */
 }
 .row-5 {
-    grid-column: span 5; /* 跨3列 */
+    grid-column: span 5; /* span 5 columns */
 }
 
 .productInput input, 
@@ -98,14 +114,10 @@
     width: 20%;
 }
 
-.formPart1InvoiceVendorInfo div:first-child,
-.formPart1InvoiceVendorInfo div:first-child select,
-.formPart1InvoiceVendorInfo div:first-child input {
-    /* margin-right: auto; */
-    text-align: left;
-    font-size: 1.1em;
+textarea {
+    width: 75%;
 }
 
-textarea {
-    width: 90%;
+.invisible{
+    display: none;
 }

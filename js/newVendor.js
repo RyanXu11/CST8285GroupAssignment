@@ -16,50 +16,56 @@ function displayDateTime() {
   }
 
 // This function is used to submit new Vendor data
-function submitData(){
-    let vendorName = document.getElementById('newVendor').value;
-    let GSTNo = document.getElementById('gstno').value;
-    let Address = document.getElementById('address').value;
-    let City = document.getElementById('city').value;
-    let Province = document.getElementById('province').value;
+function insertVendor() {
+    return new Promise((resolve, reject) => {
+        let vendorName = document.getElementById('newVendor').value;
+        let GSTNo = document.getElementById('gstno').value;
+        let Address = document.getElementById('address').value;
+        let City = document.getElementById('city').value;
+        let Province = document.getElementById('province').value;
 
-    let Country = document.getElementById('country').value;
-    let Zip = document.getElementById('zip').value;
-    let Email = document.getElementById('email').value;
-    let Phone = document.getElementById('phone').value;
-    let Membership = document.getElementById('membership').value;
+        let Country = document.getElementById('country').value;
+        let Zip = document.getElementById('zip').value;
+        let Email = document.getElementById('email').value;
+        let Phone = document.getElementById('phone').value;
+        let Membership = document.getElementById('membership').value;
 
-    let data = {
-        'vendorName': vendorName,
-        'GSTNo': GSTNo,
-        'Email': Email,
-        'Phone': Phone,
-        'Address': Address,
-        'City': City,
-        'Province': Province,
-        'Zip': Zip,
-        'Country': Country,
-        'Membership': Membership
-    };
-    console.log("data: ", data);
+        let data = {
+            'vendorName': vendorName,
+            'GSTNo': GSTNo,
+            'Email': Email,
+            'Phone': Phone,
+            'Address': Address,
+            'City': City,
+            'Province': Province,
+            'Zip': Zip,
+            'Country': Country,
+            'Membership': Membership
+        };
+        console.log("data: ", data);
 
-    // change dict object "data" to JSON format "body" which will post to php
-    let body = JSON.stringify(data);
-    console.log("body: ", body);
+        // change dict object "data" to JSON format "body" which will post to php
+        let body = JSON.stringify(data);
+        console.log("body: ", body);
 
-    fetch('./php/insertVendor.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', },
-        body: body,
-    }).then(response => {
-        return response.json(); 
-    }).then(data => {
-        let lastInsertId = data.lastInsertId;
-        console.log(lastInsertId);
-        window.opener.postMessage(lastInsertId, '*');
-    }).catch(error => {
-        console.error('Error:', error);
-    });  
+        fetch('./php/insertVendor.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', },
+            body: body,
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); 
+        }).then(data => {
+            let lastInsertId = data.lastInsertId;
+            console.log(lastInsertId);
+            resolve(lastInsertId);
+        }).catch(error => {
+            console.error('Error:', error);
+            reject(error);
+        });  
+    });
 }
 
 
@@ -102,7 +108,12 @@ document.getElementById("submit").addEventListener("click", function (e) {
         document.getElementById("warning1").textContent = error;
         element.focus();
     } else {
-        submitData();
+        insertVendor().then(lastInsertId => {
+            console.log("Last Inserted ID: ", lastInsertId);
+            window.opener.postMessage(lastInsertId, '*');
+        }).catch(error => {
+            console.error("Error occurred: ", error);
+        });
         alert("New Vendor '" + element.value + "' has been appended!");
         window.close();
     }

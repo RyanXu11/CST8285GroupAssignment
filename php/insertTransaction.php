@@ -13,8 +13,9 @@
             } else {
                 $table = "transactions";
                 $insertReturnInfo = insertTable($conn, $table, $data);
-                // var_dump($insertReturnInfo);
-                // print_r($data);
+                // var_dump("after insertTransaction: ", $insertReturnInfo);
+                // // print_r($data);
+                echo $insertReturnInfo;
                 close_database_connection($conn);
             }
         }

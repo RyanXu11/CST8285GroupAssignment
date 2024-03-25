@@ -11,7 +11,7 @@
                 http_response_code(400); //Bad Request
                 echo json_encode(array('error' => 'Invalid JSON data'));
             } else {
-                $table = "vendors";
+                $table = "transactiondetails";
                 $insertReturnInfo = insertTable($conn, $table, $data);
                 echo $insertReturnInfo;
                 // var_dump($insertReturnInfo);

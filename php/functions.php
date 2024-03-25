@@ -11,13 +11,6 @@ function open_database_connection()
     try {
         //create the connection
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-        // or use mysqli which is suitalbe for MySQL
-        //$conn = new mysqli($servername, $username, $password, $dbname);
-        //check the connection 
-        // if ($conn->connect_error) {
-        //     die("Connection Failure: " . $conn->connect_error);
-        // }
-
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $conn;
     } catch (PDOException $e) {
@@ -46,47 +39,17 @@ function insertTable($conn, $table, $data)
     foreach ($data as $key => $value) {
         $stmt->bindValue(":$key", $value);
     }
-    $stmt->execute();
-    $last_id = $conn->lastInsertId();
-    echo json_encode(array('lastInsertId' => $last_id));
+
+    if ($stmt->execute()) {
+        $last_id = $conn->lastInsertId();
+        // Return JSON response
+        return json_encode(array('lastInsertId' => $last_id));
+    } else {
+        // Handle execution errors
+        echo json_encode(array('error' => 'Failed to insert data'));
+    }
 }
 
-
-// function insertTransaction($conn, $member_id, $vendor_id, $invoice_number, $transaction_date, $transaction_time, $subtotal, $total_tax, $tips, $description)
-// {
-//     $sql = "INSERT INTO Transactions (MemberID, VendorID, InvoiceNumber, TransactionDate, TransactionTime, Subtotal, TotalTax, Tips, Descriptions) 
-//             VALUES ($member_id, $vendor_id, '$invoice_number', '$transaction_date', '$transaction_time', '$subtotal', '$total_tax', '$tips', '$description')";
-//     $conn->query($sql);
-//     return $conn->insert_id;
-// }
-
-
-
-function insertTransactionDetail($conn, $transaction_id, $product_id, $quantity, $price)
-{
-    $sql = "INSERT INTO Transaction_Details (TransactionID, ProductID, Quantity, Price) VALUES ($transaction_id, $product_id, '$quantity', '$price')";
-    $conn->query($sql);
-}
-
-// This function is used to insert new product
-// the $data is associate array, key is field name, value is the value need to be inserted
-function insertProduct($conn, $data)
-{
-    $keys = array_keys($data);
-    $fields = implode(", ", $keys);
-    $placeholders = ":" . implode(", :", $keys);
-    var_dump($keys);
-    var_dump($fields);
-    var_dump($placeholders);
-    // $stmt = $conn->prepare("INSERT INTO Products ($fields) VALUES ($placeholders)");
-
-    // foreach ($data as $key => $value) {
-    //     $stmt->bindValue(":$key", $value);
-    // }
-
-    // $stmt->execute();
-    // return $conn->lastInsertId();
-}
 
 function updateProduct($conn, $product_name)
 {
@@ -99,7 +62,6 @@ function updateProduct($conn, $product_name)
 function populateVendorOptions($conn)
 {
     $options = array();
-
     $query = "SELECT VendorID, VendorName FROM Vendors ORDER BY VendorName";
     $stmt = $conn->query($query);
     // var_dump($stmt);
@@ -111,7 +73,7 @@ function populateVendorOptions($conn)
             );
         }
     }
-
+    // var_dump("This is output of populateVendorOptions:\n", $options);
     return $options;
 }
 
@@ -167,7 +129,7 @@ function populateProductInfo($conn, $product_id)
     $query = "SELECT * FROM Products WHERE ProductID=?";
     $stmt = $conn->prepare($query);
     $stmt->execute([$product_id]);
-    $stmt->execute();
+    // $stmt->execute();
 
     if ($stmt) {
         while ($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -177,11 +139,13 @@ function populateProductInfo($conn, $product_id)
                 'price' => $rows["LatestPrice"],
                 'taxType' => $rows["TaxType"],
                 'unit' => $rows["Unit"],
-                'descriptions' => $rows["Descriptions"]
+                'descriptions' => $rows["Descriptions"],
             );
         }
     }
     return $options;
 }
+
+
 
 ?>

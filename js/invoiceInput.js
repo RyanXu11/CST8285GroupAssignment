@@ -1,20 +1,6 @@
-// import { validateName } from './common.js';
+import { displayDateTime,  validateNumber, newVendorInputWindow} from './common.js';
 
 // =============================================================================
-// This function is used displayDateTime=========================
-function displayDateTime() {
-  // get the timstamp
-  const timestamp = Date.now();
-  const currentDate = new Date(timestamp);
-
-  // format datetime
-  const formattedDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`
-  const formattedTime = `${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
-
-  // Display the datetime
-  console.log(`Current date and time: ${formattedDate} ${formattedTime}`);
-}
-
 // set transaction date default value is today
 function setTransactionDateTime(){
   // get the timstamp
@@ -36,36 +22,39 @@ const formattedDate = `${year}-${month}-${day}`;
 const formattedTime = `${hours}:${minutes}:${seconds}`;
 const formattedDateTime = `${year}${month}${day}${hours}${minutes}${seconds}`;
 
-  // document.getElementById("transactionDate").value = formattedDate;
-  // document.getElementById("transactionTime").value = formattedTime;
+  document.getElementById("transactionDate").value = formattedDate;
+  document.getElementById("transactionTime").value = formattedTime;
   document.getElementById("invoiceNumber").value = formattedDateTime;
 }
 // =============================================================================
 // Following parts are used to fetch information from Database==================
 // Function to fetch vendor options to create options of Vendor <select>
 function fetchVendorOptions() {
-  let xhr = new XMLHttpRequest();
-  xhr.open("GET", "php/getVendorName.php");
-  // xhr.responseType = 'json';
-  // displayDateTime();
-  xhr.onreadystatechange = function () {
-    if (this.readyState === 4 && this.status === 200) {
-      // console.log("This is reponseText:\n", this.responseText);
-      let options = JSON.parse(this.responseText);
-      // console.log("This is options:\n", options);
-      let select = document.getElementById("vendorSelect");
-      removeOptions(select.id);
-      // Add new options
-      options.forEach((option) => {
-        let optionElement = document.createElement("option");
-        optionElement.value = option.vendorID;
-        optionElement.textContent = option.vendorName;
-        select.appendChild(optionElement);
-      });
-    }
-  };
-  xhr.send();
+  return new Promise((resolve, reject) => {
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", "php/getVendorName.php");
+    xhr.onreadystatechange = function () {
+      if (this.readyState === 4 && this.status === 200) {
+        console.log("fetchVendorOptions: \n", this.responseText);
+        let options = JSON.parse(this.responseText);
+        let select = document.getElementById("vendorSelect");
+        removeOptions(select.id);
+        // Add new options
+        options.forEach((option) => {
+          let optionElement = document.createElement("option");
+          optionElement.value = option.vendorID;
+          optionElement.textContent = option.vendorName;
+          select.appendChild(optionElement);
+        });
+        resolve(options);
+      } else if (this.readyState === 4) {
+        reject(new Error("Error occurred while fetching vendor options"));
+      }
+    };
+    xhr.send();
+  });
 }
+
 
 // Function to fetch vendor options to populate vendor related form elements
 function fetchVendorInfo(vendorId) {
@@ -137,51 +126,35 @@ function fetchProductName(vendorId) {
 
 // This function is used to fetch product information and populate related Product form elements
 function fetchProductInfo(productId) {
-  let xhr = new XMLHttpRequest();
-  // console.log("This is vendorId:\n", vendorId);
-  let currentElement = document.getElementById(productId);
-  let currentLineNumber = currentElement.parentElement.previousElementSibling;
-  xhr.open("GET", "php/getProductInfo.php?selectedValue=" + currentElement.value, true);
-  // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  //  console.log(currentLineNumber.id);
-  // displayDateTime();
-  xhr.onreadystatechange = function () {
-    if (this.readyState === 4 && this.status === 200) {
-      let options = JSON.parse(this.responseText);
-      // console.log("This is options:\n", options);
-      // populate related form elements
-      options.forEach((option) => {
-        for (let key in option) {
-          // console.log(key + currentLineNumber.textContent.trim());
-          let element = document.getElementById(key + currentLineNumber.textContent.trim());
-          if (element) {
-            element.value = option[key];
-          }
+  return new Promise((resolve, reject) => {
+    let xhr = new XMLHttpRequest();
+    let currentElement = document.getElementById(productId);
+    let currentLineNumber = currentElement.parentElement.previousElementSibling;
+    xhr.open("GET", "php/getProductInfo.php?selectedValue=" + currentElement.value, true);
+
+    xhr.onreadystatechange = function () {
+      if (this.readyState === 4) {
+        if (this.status === 200) {
+          let options = JSON.parse(this.responseText);
+          options.forEach((option) => {
+            for (let key in option) {
+              let element = document.getElementById(key + currentLineNumber.textContent.trim());
+              if (element) {
+                element.value = option[key];
+              }
+            }
+          });
+          resolve();
+        } else {
+          reject(new Error("Request failed with status: " + this.status));
         }
-      });
-    }
-  };
-  xhr.send();
+      }
+    };
+    xhr.send();
+  });
 }
 
-function newVendorInputWindow() {
-  // New window size
-  let windowWidth = 600;
-  let windowHeight = 400;
 
-  // Calculate the windows' position
-  let leftPosition = (window.innerWidth - windowWidth) / 2 + window.screenX;
-  let topPosition = (window.innerHeight - windowHeight) / 2 + window.screenY;
-
-  // Other parameters for the new window
-  let windowFeatures = 'width=' + windowWidth + ',height=' + windowHeight + ',top=' + 
-                      topPosition + ',left=' + leftPosition + ',titlebar=no,location=no,toolbar=no';
-  // Open the window
-  let newWindow = window.open('newVendor.html', 'newWindow', windowFeatures);
-  // Set new title
-  newWindow.document.title = 'New Vendor';
-  return newWindow;
-}
 
 let childWindow;
 // Add event listener for "New Vendor" button
@@ -189,65 +162,81 @@ document.getElementById("newVendor").addEventListener("click", function () {
   childWindow = newVendorInputWindow();
 });
 
-// function handleChildWindowClose() {
-//   console.log('Child window closed');
-//   setTimeout(() => {
-//     fetchVendorOptions();
-//     let vendorSelect = document.getElementById("vendorSelect");
-//     let maxOption = Array.from(vendorSelect.options).reduce((max, option) => Number(option.value) > Number(max.value) ? option : max);
-//     document.getElementById("vendorSelect").value = maxOption.value;
-//     console.log('document.getElementById("vendorSelect").value is: ', maxOption.value);
-//     fetchVendorInfo(maxOption.value);
-//     document.getElementById("inputNewVendorProductId1").focus();
-//   }, 200);
-// }
-// window.addEventListener('childWindowClosed', handleChildWindowClose);
-
 // Receive message from childWindow
 window.addEventListener('message', function(event) {
   // displayDateTime();
   console.log("Message from: ", event.source);
   console.log("The event.data is: ", event.data);
-  // if (event.source === childWindow) {
-    // Update vendor selection options
-    setTimeout(() => {
-      fetchVendorOptions();
-      setTimeout(() => {
-        document.getElementById("vendorSelect").value = event.data;
-        let testvalue = document.getElementById("vendorSelect").value
-        console.log("testvalue is: ", testvalue);
-        fetchVendorInfo(event.data);
-        document.getElementById("inputNewVendorProductId1").focus();
-      },200);
-    }, 100); // delay 100ms
-  // }
+  if (event.source === childWindow) {
+    fetchVendorOptions().then(options => {
+      console.log("Options: ", options);
+      document.getElementById("vendorSelect").value = event.data;
+      let testvalue = document.getElementById("vendorSelect").value
+      console.log("testvalue is: ", testvalue);
+      fetchVendorInfo(event.data);
+      document.getElementById("inputNewVendorProductId1").focus();
+    }).catch(error => {
+        console.error("Error occurred: ", error);
+    });
+  }
 });
 
-// Add event listener for change of vendorSelect
-document.getElementById("vendorSelect").addEventListener("change", selectVendor);
-// document.getElementById("vendorSelect").addEventListener("click", selectVendor);
+function clearForm(){
+  // Clear Vendor information
+  document.getElementById("gstno").value="";
+  document.getElementById("address").value="";
+  document.getElementById("city").value="";
+  document.getElementById("province").value="";
+  document.getElementById("zip").value="";
+  document.getElementById("email").value="";
+  document.getElementById("phone").value="";
+  document.getElementById("membership").value="";
 
-// This event is used for "vendorSelect" <select>
-function selectVendor(event) {
+  // Reset invoiceNumber, TransactionDate and Time
+  setTransactionDateTime();
+
+  // Reset Invoice Item
+  let parentDiv = document.getElementById("fieldset3");
+  let childDivs = parentDiv.children;
+  let i = childDivs.length -1;
+  for ( i; i>=2; i--){
+    parentDiv.removeChild(childDivs[i]);
+  }
+  document.getElementById("productName1").value="";
+  document.getElementById("quantity1").value="1";
+  document.getElementById("unit1").value="0";
+  document.getElementById("price1").value="";
+  document.getElementById("taxType1").value="0";
+  document.getElementById("inputNewVendorProductId1").style.display = "inline";
+
+  // Clear subtotal
+  document.getElementById("subtotal").value="";
+  document.getElementById("totalTax").value="";
+  document.getElementById("total").value="";
+}
+
+// Add event listener for change of vendorSelect
+document.getElementById("vendorSelect").addEventListener("change", function(event) {
   let selectVendorProductId = document.getElementById("selectVendorProductId1");
   // displayDateTime();
+  clearForm(); 
   if (event.target.value === "0") {
-    // console.log(this.value);
-    location.reload();  
+      // console.log(this.value);
+      // location.reload();  
   } else {
-    selectVendorProductId.style.display = "inline";
-    fetchVendorInfo(this.value);
-    fetchProductName(this.value);
-    // replace select 
+      selectVendorProductId.style.display = "inline";
+      fetchVendorInfo(this.value);
+      fetchProductName(this.value);
   }
-}
+});
+
 
 // This eventListener is used to delete the last product line in case of misoperation
 document.getElementById('removeProduct').addEventListener('click', function() {
   if (lineNumber > 1){
     if (confirm("Are you sure you want to delete the last product?")) {
       // get the last product item <div> element
-      formPart = document.querySelector('.formPart3InvoiceProductList')
+      formPart = document.querySelector('.fieldset3')
       let lastChild = formPart.lastElementChild;
 
       // Delete the last product line
@@ -260,7 +249,7 @@ document.getElementById('removeProduct').addEventListener('click', function() {
 });
 
 // For Product list event listener, get the parent element
-var parentElement = document.getElementById('formPart3InvoiceProductList');
+var parentElement = document.getElementById('fieldset3');
 
 // Add event listener to the parent element to deal with product <select> change
 parentElement.addEventListener('change', function(e) {
@@ -278,17 +267,18 @@ parentElement.addEventListener('change', function(e) {
             inputNewVendorProductId.focus();
         } else {
             // let "new product" input invisible and get related product information
-            fetchProductInfo(e.target.id);
-            inputNewVendorProductId.style.display = "none";
-            // set Product name read only
-            e.target.parentElement.nextElementSibling.children[0].readOnly = true;
-            // set warning to empty
-            e.target.parentElement.nextElementSibling.children[1].textContent="";
-            e.target.parentElement.parentElement.children[5].children[1].textContent="";
-            // calculate the subtotal
-            setTimeout(() => {
-              calculateSubtotal();
-            }, 50)
+            fetchProductInfo(e.target.id)
+            .then(() => {
+              inputNewVendorProductId.style.display = "none";
+              e.target.parentElement.nextElementSibling.children[0].readOnly = true;
+              e.target.parentElement.nextElementSibling.children[1].textContent = "";
+              e.target.parentElement.parentElement.children[5].children[1].textContent = "";
+              calculateSubtotal(); 
+            })
+            .catch((error) => {
+              console.error("An error occurred while fetching product info:", error);
+            });
+          
 
         }
     }
@@ -334,7 +324,7 @@ function validateAllProductNames() {
   let errorMsg = "";
 
   // Get all name="productName" <input> elements
-  var inputs = document.querySelectorAll('#formPart3InvoiceProductList input[name="productName"]');
+  var inputs = document.querySelectorAll('#fieldset3 input[name="productName"]');
   // validation for all inputs until exists a invalid elements
   for (var i = 0; i < inputs.length; i++) {
     errorMsg = validateName(inputs[i]);
@@ -345,21 +335,8 @@ function validateAllProductNames() {
   return validResult;
 }
 
-// following functions are used to validate quantity and price
-// This function is used to validate quantity or price
-function validateNumber(targetId) {
-  let number = targetId.value;
-  let regexp = /^(0\.\d{1,3}|[1-9]\d*(\.\d{1,3})?)$/; //reg. expression
-  let result = numberErrorMsg; 
-  if (regexp.test(number)) {
-    //test is predefiend method to check if the entered quantity matches the regexp
-    result = defaultMSg;
-  } 
-  return result;
-}
 
-
-// // Add event listener to the parent element to validate all sub elements of "quantity" and "price"
+// Add event listener to the parent element to validate all sub elements of "quantity" and "price"
 // parentElement.addEventListener("change", function(e) {
 //   // Check the <input> product name element
 //   if(e.target && (e.target.name === 'quantity' || e.target.name === 'price')) {
@@ -374,16 +351,19 @@ function validateNumber(targetId) {
 // });
 
 function calculateSubtotal(){
-  let quantities = document.querySelectorAll('#formPart3InvoiceProductList input[name="quantity"]');
-  let prices = document.querySelectorAll('#formPart3InvoiceProductList input[name="price"]');
-  let taxType = document.querySelectorAll('#formPart3InvoiceProductList select[name="taxType"]');
+  let quantities = document.querySelectorAll('#fieldset3 input[name="quantity"]');
+  let prices = document.querySelectorAll('#fieldset3 input[name="price"]');
+  let taxType = document.querySelectorAll('#fieldset3 select[name="taxType"]');
   let subtotal = 0;
   let tax = 0;
-
+  console.log("quantities[0]:", quantities[0]);
+  console.log("prices[0]:", prices[0]);
   for (let i = 0; i < quantities.length; i++) {
+    console.log("quantities[i].value:", quantities[i].value);
+    console.log("prices[i].value:", prices[i].value);
     let itemPrice = parseFloat(quantities[i].value) * parseFloat(prices[i].value);
-    // console.log("itemPrice = ", itemPrice);
-    // console.log("taxType[i] = ", taxType[i].value);
+    console.log("itemPrice = ", itemPrice);
+    console.log("taxType[i] = ", taxType[i].value);
     subtotal += itemPrice;
     switch(taxType[i].value){
       case "H":
@@ -429,7 +409,7 @@ function validateAllQuantityPrice() {
   let errorMsg = defaultMSg;
 
   // Get all name="productName" <input> elements
-  let inputs = document.querySelectorAll('#formPart3InvoiceProductList input[name="quantity"], #formPart3InvoiceProductList input[name="price"]');
+  let inputs = document.querySelectorAll('#fieldset3 input[name="quantity"], #fieldset3 input[name="price"]');
   // validation for all inputs until exists a invalid elements
   for (var i = 0; i < inputs.length; i++) {
     errorMsg = validateNumber(inputs[i]);
@@ -493,7 +473,8 @@ document.getElementById("addInvoiceItem").addEventListener("click", function () 
     newProduct.children[5].children[0].value=""; //Do not clone price to next line
   
     //Append a new line for another product of invoice
-    document.querySelector(".formPart3InvoiceProductList").appendChild(newProduct);
+    console.log("newProduct:\n", newProduct);
+    document.getElementById("fieldset3").appendChild(newProduct);
   }
 });
 
@@ -532,64 +513,124 @@ function validateAllForm() {
 // The followin fuctions are used to post form data to database, before post validate all related elements again!
 // This function is used to submit invoice data
 // 3 tables are involves: insert products, insert transaction, insert transactionDetails
-function formatTimeForMySQL(timeString) {
-  // 将时间字符串拆分为小时、分钟和秒
-  const [hours, minutes, seconds] = timeString.split(':');
 
-  // 使用日期对象创建一个新的日期，日期部分默认为今天的日期
-  const date = new Date();
-
-  // 设置日期对象的小时、分钟和秒
-  date.setHours(hours);
-  date.setMinutes(minutes);
-  date.setSeconds(seconds);
-
-  // 格式化日期对象为 MySQL 支持的时间格式
-  const formattedTime = date.toISOString().slice(11, 19);
-
-  return formattedTime;
-}
-
-function submitTransactionData(){
-  //These 6 fields will inserted to table transaction
-  let vendorID = document.getElementById('vendorSelect').value; // in fact, it's vendorID
-  let invoiceNumber = document.getElementById('invoiceNumber').value; 
-  let transactionDate = document.getElementById('transactionDate').value;
-  let transactionTime = document.getElementById('transactionTime').value;
-  let subtotal = document.getElementById('subtotal').value;
-  let totalTax = document.getElementById('totalTax').value;
-  let description = document.getElementById('description').value;
-
-  // transactionTime = formatTimeForMySQL(transactionTime);
-  let data = {
-    'vendorID': vendorID,
-    'InvoiceNumber': invoiceNumber,
-    'TransactionDate': transactionDate,
-    'TransactionTime': transactionTime,
-    'Subtotal': subtotal,
-    'TotalTax': totalTax,
-    'Descriptions': description
-  }; // dict object 
-   console.log("data: ", data);
-  
-  // change dict object "data" to JSON format "body" which will post to php
-  let body = JSON.stringify(data);
-  console.log("body: ", body);
-
-  let url = "./php/insertInvoice.php";
   // Solution 1
   // let xhr = new XMLHttpRequest();
   // xhr.open("POST", url, true);
   // xhr.setRequestHeader("Content-Type", "application/json");
-
   // xhr.onreadystatechange = function () {
   //   if (xhr.readyState === 4 && xhr.status === 200) {
   //     console.log("this.responseText:", this.responseText);
   //     let response = JSON.parse(this.responseText);
-  //     console.log(response);
+  //     console.log("Return to submitTransaction: ", response);
+  //     return response;
   //   }
   // };
   // xhr.send(body);
+
+
+function submitTransaction() {
+  return new Promise((resolve, reject) => {
+    let vendorID = document.getElementById('vendorSelect').value;
+    let invoiceNumber = document.getElementById('invoiceNumber').value;
+    let transactionDate = document.getElementById('transactionDate').value;
+    let transactionTime = document.getElementById('transactionTime').value;
+    let subtotal = document.getElementById('subtotal').value;
+    let totalTax = document.getElementById('totalTax').value;
+    let description = document.getElementById('description').value;
+
+    let data = {
+      'vendorID': vendorID,
+      'InvoiceNumber': invoiceNumber,
+      'TransactionDate': transactionDate,
+      'TransactionTime': transactionTime,
+      'Subtotal': subtotal,
+      'TotalTax': totalTax,
+      'Descriptions': description,
+    };
+
+    let body = JSON.stringify(data);
+    let url = "./php/insertTransaction.php";
+
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: body,
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      let lastInsertId = data.lastInsertId;
+      console.log("Return to submitTransaction: ", lastInsertId);
+      resolve(lastInsertId);
+      // return lastInsertId;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      console.log('Error object:', error);
+      reject(error);
+    });
+  });
+}
+  
+function insertProduct(VendorProductId, ProductName, Unit, LatestPrice, TaxType) {
+  return new Promise((resolve, reject) => {
+      //These fields will be inserted into the Products table
+      let vendorID = document.getElementById('vendorSelect').value;
+      let data = {
+          'ProductName': ProductName,
+          'VendorProductID': VendorProductId,
+          'LatestPrice': LatestPrice,
+          'TaxType': TaxType,
+          'Unit': Unit,
+          'VendorID': vendorID,
+      }; // dict object 
+      console.log("data: ", data);
+
+      // change dict object "data" to JSON format "body" which will be posted to PHP
+      let body = JSON.stringify(data);
+      console.log("body: ", body);
+
+      let url = "./php/insertProduct.php";
+
+      fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', },
+          body: body,
+      }).then(response => {
+          return response.json();
+      }).then(data => {
+          let lastInsertId = data.lastInsertId;
+          console.log(lastInsertId);
+          resolve(lastInsertId); // Resolve the Promise with lastInsertId
+      }).catch(error => {
+          console.error('Error:', error);
+          reject(error); // Reject the Promise with the error
+      });
+  });
+}
+
+
+function insertTransactionDetail(TransactionID, ProductID, Price, Quantity) {
+  //These fields will inserted to table Products
+  let vendorID = document.getElementById('vendorSelect').value;
+  let data = {
+    'TransactionID': TransactionID,
+    'ProductID': ProductID,
+    'Price': Price,
+    'Quantity': Quantity,
+  }; // dict object 
+  // console.log("data: ", data);
+  
+  // change dict object "data" to JSON format "body" which will post to php
+  let body = JSON.stringify(data);
+  // console.log("body: ", body);
+
+  let url = "./php/insertTransactionDetail.php";
 
   // Solution 2
   fetch(url, {
@@ -600,10 +641,66 @@ function submitTransactionData(){
       return response.json();
   }).then(data => {
       let lastInsertId = data.lastInsertId;
-      console.log(lastInsertId);
+      console.log("insertTransactionDetail: ", lastInsertId);
   }).catch(error => {
       console.error('Error:', error);
-  });  
+  });
+}
+
+function traversalInvoicelist(TransactionID){
+  // Get the Parent div
+  let parentDiv = document.getElementById('fieldset3');
+  // Get all level one sub-div
+  // let childDivs = parentDiv.querySelectorAll(':scope > div');
+  let childDivs = parentDiv.children;
+  // console.log("childDivs", childDivs);
+  // From the second <div>, for the first <div> are labels
+  for(let i = 1; i < childDivs.length; i++) {
+      // There're 7 sub-elements in each childDivs[i], the first is label, from the second
+      // From the second childDivs, if not new product, get VendorProductId, if not get ProductID
+      let isNewProduct = false;
+      let ProductID;
+      let VendorProductId;
+      console.log("childDivs[i].children[1].children[0].value:\n", childDivs[i].children[1].children[0].value);
+      if (childDivs[i].children[1].children[0].value === "0") {
+        isNewProduct  = true;
+        VendorProductId = childDivs[i].children[1].children[1].value;
+      } else {
+        ProductID = childDivs[i].children[1].children[0].value;
+      }
+
+      // Get other values directly
+      ProductName = childDivs[i].children[2].children[0].value;
+      Quantity = childDivs[i].children[3].children[0].value;
+      Unit = childDivs[i].children[4].value;
+      Price = childDivs[i].children[5].children[0].value;
+      TaxType = childDivs[i].children[6].value;
+
+      console.log("ProductName = ", ProductName);
+      console.log("Unit = ", Unit);
+      console.log("TaxType = ", TaxType); 
+      console.log("TransactionID = ", TransactionID);
+      console.log("ProductID = ", ProductID);
+      console.log("Price = ", Price);      
+      console.log("Quantity = ", Quantity);  
+
+      // if it's new product, insert this new product and get the productid
+      if (isNewProduct) {
+        insertProduct(VendorProductId, ProductName, Unit, Price, TaxType)
+            .then(ProductID => {
+                // 在这里执行 insertTransactionDetail 函数调用
+                console.log("ProductID = ", ProductID);
+                insertTransactionDetail(TransactionID, ProductID, Price, Quantity);
+            })
+            .catch(error => {
+                console.error('Error inserting product:', error);
+            });
+    } else {
+        // 如果不是新产品，直接执行 insertTransactionDetail 函数调用
+        insertTransactionDetail(TransactionID, ProductID, Price, Quantity);
+    }   
+
+  }
 }
 
 // =============================================================================
@@ -613,12 +710,20 @@ document.getElementById("submit").addEventListener("click", function(e) {
   e.preventDefault(); // prevent the form from submitting normally
   // warning for all invalid product names
   let allValid = validateAllForm();
-  
+  let TransactionID;
+
   if (allValid) {
     alert("All validation passed, it's ready to submit data...");
-    submitTransactionData();
+    setTimeout(() => {
+      submitTransaction().then(TransactionID => {
+          console.log("ReturnId after insert Transaction!", TransactionID);
+          traversalInvoicelist(TransactionID);
+      }).catch(error => {
+          console.error("An error occurred:", error);
+      });
+    }, 100);
+    // location.reload();
   }
-
 });
 
 // This listener is used to click "reset" button
@@ -632,13 +737,22 @@ document.getElementById("reset").addEventListener("click", function(event){
   }
 });
 
+//========================================================================
 
 // =======================================================================
 // functions for window.onload
 window.onload = function () {
-  fetchVendorOptions();
+  fetchVendorOptions().then(options => {
+    console.log("Options: ", options);
+  }).catch(error => {
+    console.error("Error occurred: ", error);
+  });
+
   // set default transaction date to today
   setTransactionDateTime();
+  document.getElementById('fieldset2').disabled = true;
+  document.getElementById('fieldset3').disabled = true;
+  document.getElementById('fieldset4').disabled = true;
 
   let select = document.getElementById("selectVendorProductId1");
   select.style.display = "none";
