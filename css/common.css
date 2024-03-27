@@ -32,9 +32,17 @@ button {
     border-radius: 5px;
 }
 
-button[id="removeProduct"], [type="reset"], [id="delete"]{
+button.warningButton{
+    width: auto;
     background-color: red;
 }
+
+button:disabled {
+    color: #777; 
+    background-color: #ddd; 
+    border-color: #ccc; 
+}
+
 
 .warning{
     color: red;

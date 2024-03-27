@@ -27,7 +27,7 @@ function fetchVendorOptions() {
   });
 }
 
-// This function is used to fetch Transactions
+// This function is used to fetch Transactions or TransactionDetails
 function fetchTransaction(filterOptions, url, populateFunction) {
   return new Promise((resolve, reject) => {
     let body = JSON.stringify(filterOptions);
@@ -59,7 +59,7 @@ function fetchTransaction(filterOptions, url, populateFunction) {
 }
 
 // This function is used to populate the Transactions List
-function populateTransactionsList(data) {
+function transactionListTable(data) {
   let dataArray = JSON.parse(data);
   let container = document.getElementById("formPart2");
   container.innerHTML = ""; //Clear the result before new search
@@ -118,7 +118,7 @@ function populateTransactionsList(data) {
         viewButton.addEventListener("click", (e) => {
           // Call the function to view the detail
           e.preventDefault();  //prevent the form from submitting normally
-          transactionDetailSearchEvent(TransactionID);
+          transactionDetailSearchEvent(TransactionID, row);
           console.log("View button clicked, TransactionID: ", TransactionID);
         });
         // cell = document.createElement('td');
@@ -229,7 +229,7 @@ function populateTransactionDetailList(data) {
           inputElement.setAttribute("type", "text");
           inputElement.setAttribute("class", "transactionDetail");
           inputElement.setAttribute("readonly", true);
-          inputElement.setAttribute("value", item["Quantity"]);
+          inputElement.setAttribute("value", item["Price"]);
           cell.appendChild(inputElement);
           break;
         default:
@@ -253,8 +253,11 @@ function populateTransactionDetailList(data) {
 }
 
 // This function is used to find the privous nth sibling which is used for "view"/"Edit" button
+// the element is 
 function previousNthElementSibling(element, n) {
+  console.log("previousNthElementSibling current element:", element);
   let currentSibling = element.parentNode.previousElementSibling;
+  
   while (currentSibling && n > 1) {
       currentSibling = currentSibling.previousElementSibling;
       n--;
@@ -276,13 +279,14 @@ function transactionDetailCancelEvent() {
   previousNthElementSibling(this, 2).value = this.nextSibling.nextSibling.textContent;
 }
 
-// This function is used for transactionDetails search button
+// This function is used for transactionDetails Save button
 function transactionDetailEditEvent() {
   let TransactionDetailID = this.value;
-  console.log("TransactionDetailID: ", TransactionDetailID);
-  console.log("element this: ", this);
-  console.log("element this.parentNode: ", this.parentNode);
-  console.log("element.previousNthElementSibling(this, 4): ", previousNthElementSibling(this, 4));
+  let self = this;
+  console.log("TransactionDetailID in transactionDetailEditEvent: ", TransactionDetailID);
+  // console.log("element this: ", this);
+  // console.log("element this.parentNode: ", this.parentNode);
+  // console.log("element.previousNthElementSibling(this, 4): ", previousNthElementSibling(this, 4));
   if ( this.textContent == "Edit") {
     // "Quantity" is 4th previous sibling, "Unit" is 3rd previous sibling
     //  "Price" is 2nd previous sibling, "TaxType" is 1st previous sibling
@@ -294,28 +298,48 @@ function transactionDetailEditEvent() {
     this.textContent = "Save";
     this.nextSibling.style.display = 'inline';
   } else {
-    previousNthElementSibling(this, 4).setAttribute("readonly", true);
-    previousNthElementSibling(this, 4).classList.remove("editable");
-    previousNthElementSibling(this, 2).removeAttribute("readonly",true);
-    previousNthElementSibling(this, 2).classList.remove("editable");
-    this.setAttribute("class", "edit");
-    this.textContent = "Edit";
-    this.nextSibling.style.display = 'none';
-  }
-  previousNthElementSibling(this, 4).focus();
-  console.log("TransactionDetailID: ", TransactionDetailID);
+
+    // update transactionDetails and products
+    updateTransactionDetail.call(self).then(updateReturnInfo => {
+      console.log(updateReturnInfo);
+      console.log("this self for Save: ", self);
+      previousNthElementSibling(self, 4).setAttribute("readonly", true);
+      previousNthElementSibling(self, 4).classList.remove("editable");
+      previousNthElementSibling(self, 2).removeAttribute("readonly",true);
+      previousNthElementSibling(self, 2).classList.remove("editable");
+      self.setAttribute("class", "edit");
+      self.textContent = "Edit";
+      self.nextSibling.style.display = 'none';
+      transactionSearchEvent();
+    }).catch(error => {
+        console.error("Error occurred: ", error);
+    });
+    alert("The data has been updated!");
+    }
+  // console.log("TransactionDetailID: ", TransactionDetailID);
 }
 
-// This function is used for transactionDetails search button
-function transactionDetailSearchEvent(TransactionID) {
+// This function event is used for transactionDetails search button
+// @row is used to know which row clicked
+// TransactionID is the search condition
+function transactionDetailSearchEvent(TransactionID, row) {
+  console.log("this.parentNode.parentNode: \n", row.parentNode);
+  // remove all "selected" class
+  let rows = row.parentNode.getElementsByTagName("tr");
+  for (let i = 0; i < rows.length; i++) {
+      rows[i].classList.remove("selected");
+  }
+  row.classList.add("selected");
+
   let filterOptions = {
     "TransactionID": TransactionID,
   }; // dict object
-  console.log("filterOptions for fetchTransactions: \n", filterOptions);
+  // console.log("filterOptions for fetchTransactions: \n", filterOptions);
   let url = "php/fetchTransactionDetail.php";
 
   fetchTransaction(filterOptions, url, populateTransactionDetailList)
-    .then((data) => {
+    // .then(response => response.json())
+    .then(data => {
       // console.log("fetchTransactions result from php: \n", data);
       data = JSON.parse(data);
       console.log("fetchTransactionDetails result from php: \n", data);
@@ -335,13 +359,11 @@ function transactionSearchEvent() {
     "startDate": startDate,
     "endDate": endDate,
   }; // dict object
-  console.log("filterOptions for fetchTransactions: \n", filterOptions);
+  // console.log("filterOptions for fetchTransactions: \n", filterOptions);
 
   let url = "php/fetchTransactions.php";
-
-  fetchTransaction(filterOptions, url, populateTransactionsList)
+  fetchTransaction(filterOptions, url, transactionListTable)
     .then((data) => {
-      // console.log("fetchTransactions result from php: \n", data);
       data = JSON.parse(data);
       console.log("fetchTransactions result from php: \n", data);
     })
@@ -349,6 +371,46 @@ function transactionSearchEvent() {
       console.error("An error occurred:", error);
     });
 }
+
+function updateTransactionDetail() {
+  // console.log("this in updateTransactionDetail: ", this);
+  return new Promise((resolve, reject) => {
+      let Quantity = previousNthElementSibling(this, 4).value;
+      let Price = previousNthElementSibling(this, 2).value;
+      let TransactionDetailID = this.value;
+      // console.log("This: ", this);
+      // console.log("Quantity: ", Quantity);
+
+      let data = {
+          'TransactionDetailID': TransactionDetailID,
+          'Quantity': Quantity,
+          'Price': Price,
+      };
+      console.log("data: ", data);
+      // change dict object "data" to JSON format "body" which will post to php
+      let body = JSON.stringify(data);
+      console.log("body: ", body);
+
+      fetch('./php/updateTransactionDetail.php', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json', },
+          body: body,
+      }).then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json(); 
+      }).then(data => {
+          // let updateRows = data;
+          console.log("Return from updateTransactionDetail:", data);
+          resolve(data);
+      }).catch(error => {
+          console.error('Error:', error);
+          reject(error);
+      });  
+  });
+}
+
 
 // For validate Quantity and Price
 let numberErrorMsg = "❌ Invalid number.";

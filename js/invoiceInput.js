@@ -124,6 +124,34 @@ function fetchProductName(vendorId) {
   xhr.send();
 }
 
+// This function is used to create table for transaction detail
+// function fetchProductName2(vendorId) {
+//   let xhr = new XMLHttpRequest();
+//   // console.log("This is vendorId:\n", vendorId);
+//   xhr.open("GET", "php/getProductName.php?selectedValue=" + vendorId, true);
+//   // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+//   // displayDateTime();
+//   xhr.onreadystatechange = function () {
+//     if (this.readyState === 4 && this.status === 200) {
+//       // Get the <select> element and remove exsit options to avoid duplicated <option> items
+//       let selectVendorProductId = document.getElementById('selectVendorProductId1');
+//       let newSelectElement=document.createElement('select');
+//       // console.log("This is selectVendorProductId1:\n", selectVendorProductId1);
+//       // Append new options
+//       let options = JSON.parse(this.responseText);
+//       options.forEach((option) => {
+//           // console.log("This is option for fetchProductName:\n", option);
+//           let newOption = document.createElement('option');
+//           newOption.value = option['ProductID'];
+//           newOption.textContent = option['VendorProductID'] + " | " + option['ProductName'];
+//           newSelectElement.appendChild(newOption);
+//       });
+//       return newSelectElement;
+//     }
+//   }
+//   xhr.send();
+// }
+
 // This function is used to fetch product information and populate related Product form elements
 function fetchProductInfo(productId) {
   return new Promise((resolve, reject) => {
@@ -154,99 +182,283 @@ function fetchProductInfo(productId) {
   });
 }
 
+// This function is used to insert new vendor information
+function insertVendor() {
+  return new Promise((resolve, reject) => {
+      let vendorName = document.getElementById('inputVendorName').value;
+      let GSTNo = document.getElementById('gstno').value;
+      let Address = document.getElementById('address').value;
+      let City = document.getElementById('city').value;
+      let Province = document.getElementById('province').value;
 
+      // let Country = document.getElementById('country').value;
+      let Zip = document.getElementById('zip').value;
+      let Email = document.getElementById('email').value;
+      let Phone = document.getElementById('phone').value;
+      let Membership = document.getElementById('membership').value;
 
-let childWindow;
-// Add event listener for "New Vendor" button
-document.getElementById("newVendor").addEventListener("click", function () {
-  childWindow = newVendorInputWindow();
+      let data = {
+          'vendorName': vendorName,
+          'GSTNo': GSTNo,
+          'Email': Email,
+          'Phone': Phone,
+          'Address': Address,
+          'City': City,
+          'Province': Province,
+          'Zip': Zip,
+          // 'Country': Country,
+          'Membership': Membership
+      };
+      console.log("data: ", data);
+
+      // change dict object "data" to JSON format "body" which will post to php
+      let body = JSON.stringify(data);
+      console.log("body: ", body);
+
+      fetch('./php/insertVendor.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', },
+          body: body,
+      }).then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json(); 
+      }).then(data => {
+          let lastInsertId = data.lastInsertId;
+          console.log(lastInsertId);
+          resolve(lastInsertId);
+      }).catch(error => {
+          console.error('Error:', error);
+          reject(error);
+      });  
+  });
+}
+
+// This function is used to update the exist vendor information
+function updateVendor() {
+  return new Promise((resolve, reject) => {
+      let vendorID = document.getElementById("vendorSelect").value;
+      let vendorName = document.getElementById('inputVendorName').value;
+      let GSTNo = document.getElementById('gstno').value;
+      let Address = document.getElementById('address').value;
+      let City = document.getElementById('city').value;
+      let Province = document.getElementById('province').value;
+
+      // let Country = document.getElementById('country').value;
+      let Zip = document.getElementById('zip').value;
+      let Email = document.getElementById('email').value;
+      let Phone = document.getElementById('phone').value;
+      let Membership = document.getElementById('membership').value;
+
+      let data = {
+          'VendorID': vendorID,
+          'vendorName': vendorName,
+          'GSTNo': GSTNo,
+          'Email': Email,
+          'Phone': Phone,
+          'Address': Address,
+          'City': City,
+          'Province': Province,
+          'Zip': Zip,
+          // 'Country': Country,
+          'Membership': Membership
+      };
+      console.log("data: ", data);
+
+      // change dict object "data" to JSON format "body" which will post to php
+      let body = JSON.stringify(data);
+      console.log("body: ", body);
+
+      fetch('./php/updateVendor.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', },
+          body: body,
+      }).then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json(); 
+      }).then(data => {
+          // let updateRows = data;
+          console.log(data);
+          resolve(data);
+      }).catch(error => {
+          console.error('Error:', error);
+          reject(error);
+      });  
+  });
+}
+
+// Add event listener for "New Vendor" button， two state: "New Vendor", "Save Vendor"
+document.getElementById("newVendorBtn").addEventListener("click", function () {
+  if (this.textContent === "New Vendor") {
+      formState("newVendorInput");
+  } else {
+      let element = document.getElementById("inputVendorName");
+      // console.log("validateName",element);
+      let error = validateName(element);
+      // console.log("The error",error);
+      if (error !== defaultMSg){
+          document.getElementById("warning1").textContent = error;
+          element.focus();         
+      } else {
+          insertVendor().then(lastInsertId => {
+              console.log("Last Inserted ID: ", lastInsertId);
+              // window.opener.postMessage(lastInsertId, '*');
+              fetchVendorOptions().then(options => {
+                  console.log("Options: ", options);
+                  // document.getElementById("vendorSelect").value = lastInsertId;
+                  fetchVendorInfo(lastInsertId);
+
+                  // after saving, the formState should be existVendorSelected, the latest is the selected one
+                  formState("existVendorSeleted");
+              }).catch(error => {
+                  console.error("Error occurred: ", error);
+              });
+          }).catch(error => {
+              console.error("Error occurred: ", error);
+          });
+          alert("New Vendor '" + element.value + "' has been appended!");
+          // window.close();
+      }
+  }
 });
+
+// Add event listener for existVendorBtn button, two state: "Edit Vendor", "Save Vendor"
+document.getElementById("existVendorBtn").addEventListener("click", function () {
+    if (this.textContent === "Edit Vendor") {
+        let fields = ["address", "city", "province", "zip", "email", "phone", "gstno", "membership"];
+        let elements = ["vendorP1", "vendorP2","vendorP3","vendorP4","vendorP5","vendorP6","vendorP7","vendorP8",]
+        for (let i=0; i<8; i++) {
+          document.getElementById(elements[i]).textContent = document.getElementById(fields[i]).value;
+        }
+        formState("existVendorEdit");
+    } else {
+        let element = document.getElementById("inputVendorName");
+        // console.log("validateName",element);
+        let error = validateName(element);
+        // console.log("The error",error);
+        if (error !== defaultMSg){
+            document.getElementById("warning1").textContent = error;
+            element.focus();
+        } else {
+            updateVendor().then(updateReturnInfo => {
+                console.log(updateReturnInfo);
+                fetchVendorOptions().then(options => {
+                    console.log("Options: ", options);
+                    formState("existVendorSeleted");
+                }).catch(error => {
+                    console.error("Error occurred: ", error);
+                });
+            }).catch(error => {
+                console.error("Error occurred: ", error);
+            });
+            alert("Vendor '" + element.value + "' has been saved!");
+            // window.close();
+        }
+    }
+});
+
+// Add event listener for vendorEditCancelBtn button, 
+document.getElementById("vendorEditCancelBtn").addEventListener("click", function () {
+    let fields = ["address", "city", "province", "zip", "email", "phone", "gstno", "membership"];
+    let elements = ["vendorP1", "vendorP2","vendorP3","vendorP4","vendorP5","vendorP6","vendorP7","vendorP8",]
+    for (let i=0; i<8; i++) {
+        document.getElementById(fields[i]).value = document.getElementById(elements[i]).textContent;
+    }
+    formState("existVendorSeleted");
+});
+
+// let childWindow;
+// // Add event listener for "New Vendor" button
+// document.getElementById("newVendor").addEventListener("click", function () {
+//   childWindow = newVendorInputWindow();
+// });
 
 // Receive message from childWindow
-window.addEventListener('message', function(event) {
-  // displayDateTime();
-  console.log("Message from: ", event.source);
-  console.log("The event.data is: ", event.data);
-  if (event.source === childWindow) {
-    fetchVendorOptions().then(options => {
-      console.log("Options: ", options);
-      document.getElementById("vendorSelect").value = event.data;
-      let testvalue = document.getElementById("vendorSelect").value
-      console.log("testvalue is: ", testvalue);
-      fetchVendorInfo(event.data);
-      document.getElementById("inputNewVendorProductId1").focus();
-    }).catch(error => {
-        console.error("Error occurred: ", error);
-    });
+// window.addEventListener('message', function(event) {
+//   // displayDateTime();
+//   console.log("Message from: ", event.source);
+//   console.log("The event.data is: ", event.data);
+//   if (event.source === childWindow) {
+//     fetchVendorOptions().then(options => {
+//       console.log("Options: ", options);
+//       document.getElementById("vendorSelect").value = event.data;
+//       let testvalue = document.getElementById("vendorSelect").value
+//       console.log("testvalue is: ", testvalue);
+//       fetchVendorInfo(event.data);
+//       document.getElementById("inputNewVendorProductId1").focus();
+//     }).catch(error => {
+//         console.error("Error occurred: ", error);
+//     });
+//   }
+// });
+
+//==============================================================================
+// These functions are used to clear fieldsets
+function clearFieldset1(){
+  let fields = ["address", "city", "province", "zip", "email", "phone", "gstno", "membership"];
+  fields.forEach(function(field) {document.getElementById(field).value = "";});
+}
+
+function setVendorEditable(setBoolean){
+  let fields = ["address", "city", "province", "zip", "email", "phone", "gstno", "membership"];
+  if (setBoolean) {
+    fields.forEach(function(field) {document.getElementById(field).removeAttribute("readonly")});
+  } else {
+    fields.forEach(function(field) {document.getElementById(field).setAttribute("readonly", true)});
   }
-});
+}
 
-function clearForm(){
-  // Clear Vendor information
-  document.getElementById("gstno").value="";
-  document.getElementById("address").value="";
-  document.getElementById("city").value="";
-  document.getElementById("province").value="";
-  document.getElementById("zip").value="";
-  document.getElementById("email").value="";
-  document.getElementById("phone").value="";
-  document.getElementById("membership").value="";
+function clearFieldset3() {
+    // Reset Invoice Item
+    let parentDiv = document.getElementById("fieldset3");
+    let childDivs = parentDiv.children;
+    let i = childDivs.length -1;
+    for ( i; i>=2; i--){
+      parentDiv.removeChild(childDivs[i]);
+    }
+    document.getElementById("productName1").value="";
+    document.getElementById("quantity1").value="1";
+    document.getElementById("unit1").value="0";
+    document.getElementById("price1").value="";
+    document.getElementById("taxType1").value="0";
+    document.getElementById("inputNewVendorProductId1").style.display = "inline";
+}
 
-  // Reset invoiceNumber, TransactionDate and Time
-  setTransactionDateTime();
-
-  // Reset Invoice Item
-  let parentDiv = document.getElementById("fieldset3");
-  let childDivs = parentDiv.children;
-  let i = childDivs.length -1;
-  for ( i; i>=2; i--){
-    parentDiv.removeChild(childDivs[i]);
-  }
-  document.getElementById("productName1").value="";
-  document.getElementById("quantity1").value="1";
-  document.getElementById("unit1").value="0";
-  document.getElementById("price1").value="";
-  document.getElementById("taxType1").value="0";
-  document.getElementById("inputNewVendorProductId1").style.display = "inline";
-
-  // Clear subtotal
+function clearFieldset4(){
   document.getElementById("subtotal").value="";
   document.getElementById("totalTax").value="";
   document.getElementById("total").value="";
 }
 
+function clearForm(){
+  // Clear Vendor information
+  clearFieldset1()
+
+  // Reset invoiceNumber, TransactionDate and Time
+  setTransactionDateTime();
+
+  clearFieldset3()
+
+  // Clear subtotal
+  clearFieldset4();
+}
+
 // Add event listener for change of vendorSelect
 document.getElementById("vendorSelect").addEventListener("change", function(event) {
-  let selectVendorProductId = document.getElementById("selectVendorProductId1");
   // displayDateTime();
   clearForm(); 
   if (event.target.value === "0") {
-      // console.log(this.value);
-      // location.reload();  
+    formState();
   } else {
-      selectVendorProductId.style.display = "inline";
-      fetchVendorInfo(this.value);
-      fetchProductName(this.value);
-  }
+    formState("existVendorSeleted");
+    fetchVendorInfo(this.value);
+    fetchProductName(this.value);
+}
 });
 
-
-// This eventListener is used to delete the last product line in case of misoperation
-document.getElementById('removeProduct').addEventListener('click', function() {
-  if (lineNumber > 1){
-    if (confirm("Are you sure you want to delete the last product?")) {
-      // get the last product item <div> element
-      formPart = document.querySelector('.fieldset3')
-      let lastChild = formPart.lastElementChild;
-
-      // Delete the last product line
-      formPart.removeChild(lastChild);
-      lineNumber--;
-    }
-  } else {
-    alert("There's at least one item in this invoice!")
-  }
-});
 
 // For Product list event listener, get the parent element
 var parentElement = document.getElementById('fieldset3');
@@ -334,6 +546,56 @@ function validateAllProductNames() {
   }
   return validResult;
 }
+
+
+// This function is used to create a table for TransactionDetail List
+// function createTransactionDetailTabel() {
+//   let vendorID=document.getElementById("vendorSelect").value;
+//   let container = document.getElementById("fieldset5");
+//   container.innerHTML = ""; //Clear the result before new search
+//   let columns = [
+//     "Row#",
+//     "Vendor ProductID",
+//     "ProductName",
+//     "Quantity",
+//     "Price",
+//     "TaxType",
+//     "Delete",
+//     "Description",
+//     "ProductID",
+//   ];
+
+//   let table = document.createElement("table");
+//   table.setAttribute("class", "list");
+
+//   // Create label row
+//   let rowlabel = document.createElement("tr");
+//   for (let column of columns) {
+//     let cell = document.createElement("th");
+//     if (column !== "ProductID") {
+//       cell.textContent = column;
+//     } else {
+//       // The last column is for View Button
+//       cell.textContent = "";
+//     }
+//     rowlabel.appendChild(cell);
+//   }
+//   table.appendChild(rowlabel);
+
+//   let inputRow = document.createElement("tr");
+//   let cell= document.createElement("td");
+//   cell.textContent = "1";
+//   inputRow.appendChild(cell);  // Row#
+
+//   inputRow.appendChild(fetchProductName2(vendorID)); // Vendor Product ID Select
+
+//   inputRow.appendChild
+//   //
+//   //
+
+// }
+  
+
 
 
 // Add event listener to the parent element to validate all sub elements of "quantity" and "price"
@@ -466,15 +728,23 @@ document.getElementById("addInvoiceItem").addEventListener("click", function () 
     let productDiv = document.querySelector(".productInput");
     // console.log(inputDiv);
     const newProduct = updateElementIds(productDiv.cloneNode(true), lineNumber);
+    
     newProduct.children[1].children[1].style.display = "inline";
     newProduct.children[2].children[0].value=""; //Do not clone product name to next line
     newProduct.children[2].children[0].readOnly = false;
     newProduct.children[3].children[0].value="1"; //Do not clone price and set it to default value (1) to next line
     newProduct.children[5].children[0].value=""; //Do not clone price to next line
+    newProduct.children[7].style.display = "inline";
+
+    //Add event listener to delete button
+    newProduct.children[7].addEventListener("click", function() {
+      this.parentNode.remove();
+    });
   
     //Append a new line for another product of invoice
     console.log("newProduct:\n", newProduct);
     document.getElementById("fieldset3").appendChild(newProduct);
+
   }
 });
 
@@ -684,11 +954,10 @@ function traversalInvoicelist(TransactionID){
       console.log("Price = ", Price);      
       console.log("Quantity = ", Quantity);  
 
-      // if it's new product, insert this new product and get the productid
+      // if it's new product, insert this new product and get the productID
       if (isNewProduct) {
         insertProduct(VendorProductId, ProductName, Unit, Price, TaxType)
             .then(ProductID => {
-                // 在这里执行 insertTransactionDetail 函数调用
                 console.log("ProductID = ", ProductID);
                 insertTransactionDetail(TransactionID, ProductID, Price, Quantity);
             })
@@ -696,7 +965,7 @@ function traversalInvoicelist(TransactionID){
                 console.error('Error inserting product:', error);
             });
     } else {
-        // 如果不是新产品，直接执行 insertTransactionDetail 函数调用
+        // If not new product insertTransactionDetail
         insertTransactionDetail(TransactionID, ProductID, Price, Quantity);
     }   
 
@@ -738,7 +1007,113 @@ document.getElementById("reset").addEventListener("click", function(event){
 });
 
 //========================================================================
+// This function is used to set the form state, which can be used, which can't
+function formState(state){
+  let selectProduct = document.getElementById("selectVendorProductId1");
+  let selectedVendor = document.getElementById("vendorSelect");
+  switch(state){
+    case "newVendorInput":
+      // vendorSelect element
+      document.getElementById('vendorSelect').disabled = true;
+      // inputVendorName 
+      document.getElementById("inputVendorName").style.display = "inline";
+      document.getElementById("inputVendorName").value = "";
+      // newVendor Button
+      document.getElementById('newVendorBtn').disabled = false;
+      document.getElementById('newVendorBtn').textContent = "Save Vendor";
+      // existVendor Button
+      document.getElementById('existVendorBtn').disabled = true;
+      document.getElementById('existVendorBtn').textContent = "Edit Vendor";
+      // vendorEditCancel Button
+      document.getElementById('vendorEditCancelBtn').disabled = false;
+      // set vendor edit area
+      setVendorEditable(true);
+      // selectProduct in line# 1 of transaction detail area
+      selectProduct.style.display = "none";
+      // delete1 button in line# 1 of transaction detail area
+      document.getElementById('delete1').style.display = "none";
+      // fieldsets
+      document.getElementById('fieldset2').disabled = true;
+      document.getElementById('fieldset3').disabled = true;
+      document.getElementById('fieldset4').disabled = true;
 
+      document.getElementById("inputVendorName").focus;
+      break;
+    case "existVendorSeleted":
+      // inputVendorName
+      document.getElementById("inputVendorName").value = "";
+      document.getElementById("inputVendorName").style.display = "none";
+      // newVendor Button
+      document.getElementById('newVendorBtn').disabled = true;
+      document.getElementById('newVendorBtn').textContent = "New Vendor";
+      // existVendor Button
+      document.getElementById('existVendorBtn').disabled = false;
+      document.getElementById('existVendorBtn').textContent = "Edit Vendor";
+      // vendorEditCancel Button
+      document.getElementById('vendorEditCancelBtn').disabled = true;
+      // set vendor edit area
+      setVendorEditable(false);
+      // selectProduct in line# 1 of transaction detail area
+      selectProduct.style.display = "inline";
+      // delete1 button in line# 1 of transaction detail area
+      document.getElementById('delete1').style.display = "none";
+      // fieldsets
+      document.getElementById('fieldset2').disabled = false;
+      document.getElementById('fieldset3').disabled = false;
+      document.getElementById('fieldset4').disabled = false;
+
+      selectProduct.focus;
+      break;
+    case "existVendorEdit":
+      // inputVendorName
+      document.getElementById("inputVendorName").value = selectedVendor.options[selectedVendor.selectedIndex].text;
+      document.getElementById("inputVendorName").style.display = "inline";
+      // newVendor Button
+      document.getElementById('newVendorBtn').disabled = true;
+      document.getElementById('newVendorBtn').textContent = "New Vendor";
+      // existVendor Button
+      document.getElementById('existVendorBtn').disabled = false;
+      document.getElementById('existVendorBtn').textContent = "Save Vendor";
+      // vendorEditCancel Button
+      document.getElementById('vendorEditCancelBtn').disabled = false;
+      // set vendor edit area
+      setVendorEditable(true);
+      // selectProduct in line# 1 of transaction detail area
+      selectProduct.style.display = "inline";
+      // delete1 button in line# 1 of transaction detail area
+      document.getElementById('delete1').style.display = "none";
+      // fieldsets
+      document.getElementById('fieldset2').disabled = true;
+      document.getElementById('fieldset3').disabled = true;
+      document.getElementById('fieldset4').disabled = true;
+
+      document.getElementById("inputVendorName").focus;
+    break;
+    default:   // default is the status after page loaded
+      // vendorSelect element
+      document.getElementById('vendorSelect').disabled = false;
+      // inputVendorName element
+      document.getElementById("inputVendorName").style.display = "none";
+      // newVendor Button
+      document.getElementById('newVendorBtn').disabled = false;
+      document.getElementById('newVendorBtn').textContent = "New Vendor";
+      // existVendor Button
+      document.getElementById('existVendorBtn').disabled = true;
+      document.getElementById('existVendorBtn').textContent = "Edit Vendor";
+      // vendorEditCancel Button
+      document.getElementById('vendorEditCancelBtn').disabled = true;
+      // set vendor edit area
+      setVendorEditable(false);
+      // selectProduct in line# 1 of transaction detail area
+      selectProduct.style.display = "none";
+      // delete1 button in line# 1 of transaction detail area
+      document.getElementById('delete1').style.display = "none";
+      // fieldsets
+      document.getElementById('fieldset2').disabled = true;
+      document.getElementById('fieldset3').disabled = true;
+      document.getElementById('fieldset4').disabled = true;
+  }
+}
 // =======================================================================
 // functions for window.onload
 window.onload = function () {
@@ -750,11 +1125,6 @@ window.onload = function () {
 
   // set default transaction date to today
   setTransactionDateTime();
-  document.getElementById('fieldset2').disabled = true;
-  document.getElementById('fieldset3').disabled = true;
-  document.getElementById('fieldset4').disabled = true;
-
-  let select = document.getElementById("selectVendorProductId1");
-  select.style.display = "none";
+  formState();
   // displayDateTime();
 }

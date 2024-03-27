@@ -99,3 +99,8 @@ button.save{
 p.memory{
     display: none;
 }
+
+.selected {
+    border: 1px solid #21b7c5; /* 使用相同的边框颜色 */
+    background: #4eb8df; /* 使用浅一些的蓝色作为背景 */
+}

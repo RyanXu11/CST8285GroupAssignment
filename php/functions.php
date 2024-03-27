@@ -50,12 +50,52 @@ function insertTable($conn, $table, $data)
     }
 }
 
-
-function updateProduct($conn, $product_name)
+// This funciton is used to update table information
+function updateTable($conn, $table, $data)
 {
-    $sql = "INSERT INTO Products (ProductName) VALUES ('$product_name')";
-    $conn->query($sql);
-    return $conn->insert_id;
+    // Validate input data
+    if (!is_array($data) || empty($data)) {
+        echo "Invalid input data.";
+        return;
+    }
+
+    try{
+        // Extract the update ID from the data
+        $updateID = array_keys($data)[0]; // Get the first key in the array
+
+        // Construct the update SQL with placeholders
+        $sql = "UPDATE $table SET ";
+        $setValue = [];
+        foreach ($data as $key => $value) {
+            if ($key !== $updateID) {
+                $setValue[] = "$key = :$key";
+            }
+        }
+        $sql .= implode(", ", $setValue);
+        $sql .= " WHERE $updateID = :$updateID"; // such as $data['VendorID']
+
+        // Execute the statement
+        $stmt = $conn->prepare($sql);
+
+        // Bind parameters
+        foreach ($data as $key => $value) {
+            $stmt->bindValue(":$key", $value);
+        }
+
+        // Execute the statement
+        $stmt->execute();
+
+        // Check if the update was successful
+        $rowCount = $stmt -> rowCount();
+        if ($rowCount > 0) {
+            return $rowCount;
+        } else {
+            return 0;
+        }
+    } catch (PDOException $e) {
+        echo "Update failed: " . $e->getMessage();
+    }
+    
 }
 
 
