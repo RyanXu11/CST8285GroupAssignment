@@ -67,6 +67,7 @@ function vaildateEmail() {
 
 //method to validate login
 function vaildateLogin() {
+  // console.log("loginInput:", loginInput);
   let login = loginInput.value; // access the value of the login (User Name)
   if (login.trim() === "" || login.length > 30) {
     error = loginErrorMsg;
@@ -249,7 +250,7 @@ function registerUser() {
             let response = JSON.parse(this.responseText);
             if (response.success) {
                 alert("Signup successed!");
-                window.location.href="login.html";
+                window.location.href="login.php";
             } else {
                 alert("Signup failed!");
             }

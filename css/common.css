@@ -1,16 +1,89 @@
 body {
+    /* display: flex;
+    flex-direction: column; */
     font-family: Arial, sans-serif;
-    /* Other color: #ddd78d;  */
+    /* Other color: #ddd78d;   */
     background-color: #f4f4f4;
     padding: 0;
-    display: flex;
-    flex-direction: column;
     align-items: center;
     height: 100vh;
 }
 
-h1 {
-    margin-top: 0;
+header {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+    align-content: center;
+    align-items: center;
+    background-color:#FFFFFF;
+    color: #93a29b;
+    margin: 0 auto;
+    
+}
+
+main {
+    width: 70%;
+    align-content: center;
+    /* margin-left: 15%; */
+    margin: 0 auto;
+    /* padding: 20px; */
+    background-color: #e3eefc;
+    height: 70vh;
+}
+
+header h1{
+    /* margin-right: 0; */
+    width:100%;
+    margin-left: 0;
+    margin-top: 20px;
+    color:#333333;
+}
+
+
+nav {
+    display: flex;
+    width: 100%;
+    justify-content: end;
+    background-color: #FFFFFF;
+    color: #93a29b;
+    text-decoration: none;
+    /* margin-left: 40%; */
+    margin-right: 0; 
+    font-size: 12pt;
+    border-radius: 10px;
+    padding: 3px;
+}
+
+.nav-link {
+    text-decoration: none;
+    font-size: 12pt;
+    border-radius: 1px;
+    padding: 3px;
+    margin: 0 10px;
+    color: #333333;
+}
+
+.nav-link:hover {
+    color: #007BFF;
+}
+
+a {
+    color: #007BFF;
+}
+
+.buttonDiv{
+    display: flex;
+    justify-content: space-around;
+}
+
+.buttonDiv button{
+    width: 20%;
+}
+
+.current {
+    color: #007BFF; /* current page's nav color */
+    border-bottom: 2px solid #007BFF; /* add blue line below current nav */
 }
 
 form {
@@ -20,8 +93,32 @@ form {
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 80%;
+    /* width: 80%; */
     gap:5px;
+}
+
+.main {
+    display: grid;
+    max-width: 1600px;
+    grid-template-columns: 50% 50%;
+    gap: 10px 1px;
+    /* width: 70%; */
+    margin: 0 auto;
+    /* place-items: center; */
+    align-items: center;
+}
+.cell {
+    text-align: center;
+}
+
+.pictures {
+    width: 60%;
+    height: auto;
+}
+
+.maintext {
+    text-align: left;
+    justify-self: start;
 }
 
 button {
@@ -62,6 +159,37 @@ button:disabled {
     }
 }
 
+
+
+/* The following are for footer. */
+footer {
+    /* position: fixed; */
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    align-items: center;
+    background-color:#FFFFFF;
+    color: #93a29b;
+    margin: 0 auto;
+}
+
+footer div {
+    width: 70%;
+}
+footer div p {
+    white-space:nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-left: 0;
+    margin-right: 0%; 
+}
+
+footer nav {
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
 
 @media screen and (min-width: 800px) {
     .gridCourseDetail {

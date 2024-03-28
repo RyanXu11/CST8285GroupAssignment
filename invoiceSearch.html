@@ -13,71 +13,74 @@
         <h1 id="header">Invoice Information Search</h1>
         <nav>
             <a href="index.html" class="nav-link  current" id="index">Home</a>
-            <a href="invoiceInput.html" class="nav-link" id="resume">Invoice Input</a>
-            <a href="invoiceSearch.html" class="nav-link" id="courses">Invoice Search</a>
-            <a href="productPrice.html" class="nav-link" id="contact">Product Price Trend</a>
+            <a href="invoiceInput.html" class="nav-link" id="invoiceInput">InvoiceInput</a>
+            <a href="invoiceSearch.html" class="nav-link" id="invoiceSearch">InvoiceSearch</a>
+            <a href="login.html" class="nav-link" id="logout">Logout</a>
         </nav>
     </header>
-    <form action="php/fetchTransactions.php" method="post">
-        <fieldset >
-            <legend>Filters</legend>
-            <div class="formPart" id="formPart1">
-                <div class="row-item" id="vendorname">
-                    <label for="vendorSelect">Select The Vendor</label>
-                    <select id="vendorSelect" name="vendorSelect">
-                        <option value="0">All Vendor</option>
-                    </select>
-                </div>
-                
-                <div class="row-item">
-                    <label for="startDate">Start Date</label>
-                    <input type="date" name="startDate" id="startDate">
-                </div>
+    <main>
+        <form action="php/fetchTransactions.php" method="post">
+            <fieldset >
+                <legend>Filters</legend>
+                <div class="formPart" id="formPart1">
+                    <div class="row-item" id="vendorname">
+                        <label for="vendorSelect">Select The Vendor</label>
+                        <select id="vendorSelect" name="vendorSelect">
+                            <option value="0">All Vendor</option>
+                        </select>
+                    </div>
+                    
+                    <div class="row-item">
+                        <label for="startDate">Start Date</label>
+                        <input type="date" name="startDate" id="startDate">
+                    </div>
+            
+                    <div class="row-item">
+                        <label for="endDate">End Date</label>
+                        <input type="date" name="endDate" id="endDate">
+                    </div>
         
-                <div class="row-item">
-                    <label for="endDate">End Date</label>
-                    <input type="date" name="endDate" id="endDate">
+                    <div class="row-item">
+                        <button type="button" id="search">Search</button>
+                        <button type="reset" id="reset">Reset</button>
+                    </div>  
                 </div>
+            </fieldset>
+            <fieldset>
+                <legend>Transactions List</legend>
+                <div class="formPart" id="formPart2">
+                    <div class="TransactionLabel">
+                        <p class="label">Vendor Name</p>
+                        <p class="label">InvoiceNumber</p>
+                        <p class="label">Transaction Date</p>
+                        <p class="label">Transaction Time</p>
+                        <p class="label">Subtoal</p>
+                        <p class="label">Tax</p>
+                        <p class="label">Total</p>
+                        <p class="label">Description</p>
+                        <p class="label"></p>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Trsanctions Detail</legend>
+                <div class="formPart" id="formPart3">
+                    <div class="productLabel">
+                        <p class="label">Row#</p>
+                        <p class="label">Vendor Product ID</p>
+                        <p class="label">Product Name</p>
+                        <p class="label">Quantity</p>
+                        <p class="label">Unit</p>
+                        <p class="label">Price</p>
+                        <p class="label">TaxType</p>
+                        <p>&nbsp</p>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
     
-                <div class="row-item">
-                    <button type="button" id="search">Search</button>
-                    <button type="reset" id="reset">Reset</button>
-                </div>  
-            </div>
-        </fieldset>
-        <fieldset>
-            <legend>Transactions List</legend>
-            <div class="formPart" id="formPart2">
-                <div class="TransactionLabel">
-                    <p class="label">Vendor Name</p>
-                    <p class="label">InvoiceNumber</p>
-                    <p class="label">Transaction Date</p>
-                    <p class="label">Transaction Time</p>
-                    <p class="label">Subtoal</p>
-                    <p class="label">Tax</p>
-                    <p class="label">Total</p>
-                    <p class="label">Description</p>
-                    <p class="label"></p>
-                </div>
-            </div>
-        </fieldset>
-        <fieldset>
-            <legend>Trsanctions Detail</legend>
-            <div class="formPart" id="formPart3">
-                <div class="productLabel">
-                    <p class="label">Row#</p>
-                    <p class="label">Vendor Product ID</p>
-                    <p class="label">Product Name</p>
-                    <p class="label">Quantity</p>
-                    <p class="label">Unit</p>
-                    <p class="label">Price</p>
-                    <p class="label">TaxType</p>
-                    <p>&nbsp</p>
-                </div>
-            </div>
-        </fieldset>
-    </form>
-    
+    </main>
+     
     <footer>
         <nav>
             <a href="#header">Top of Page</a>

@@ -15,6 +15,7 @@
         try {
             $stmt = $conn->prepare('INSERT INTO familymembers (username, password, email) VALUES (?, ?, ?)');
             $stmt->execute([$username, $password, $email]);
+            
             header('Content-Type: application/json');
             $response = array('success' => true);
             echo json_encode($response);

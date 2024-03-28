@@ -74,7 +74,7 @@ a:hover {
 
 .container {
   display: flex;
-  background-color: #f1f1f1;
+  /* background-color: #f1f1f1; */
   padding: 10px; 
   grid-template-columns: 1fr 1fr;
   justify-content: space-between;
