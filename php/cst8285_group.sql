@@ -22,7 +22,8 @@ CREATE TABLE IF NOT EXISTS `cst8285_group`.`FamilyMembers` (
   `NickName` VARCHAR(50) NULL,
   `Relationship` VARCHAR(20) NULL,
   `Gender` VARCHAR(6) NULL,
-  `PasswordHash` VARCHAR(255) NULL,
+  `email` VARCHAR(50) NULL,
+  `password` VARCHAR(255) NULL,
   PRIMARY KEY (`MemberID`))
 ENGINE = InnoDB;
 

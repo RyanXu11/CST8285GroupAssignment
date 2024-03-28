@@ -17,8 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password'])) {
+            $_SESSION['username'] = $_POST['username'];
             header('Content-Type: application/json');
-            $response = array('success' => true);
+            $response = array('success' => true, 'username' => $_SESSION['username']);
             echo json_encode($response);
         } else {
             http_response_code(401); // Unauthorized

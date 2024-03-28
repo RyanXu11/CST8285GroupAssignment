@@ -71,7 +71,8 @@ function vaildateLogin() {
   if (login.trim() === "" || login.length > 30) {
     error = loginErrorMsg;
   } else {
-    login = login.toLowerCase();
+    // login = login.toLowerCase();?
+    login = login;
     loginInput.value = login;  // update the value to lowercase
     error = defaultMSg;
   }
