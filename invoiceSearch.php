@@ -1,49 +1,84 @@
+<?php
+session_start();
+
+// check the session user
+if (isset ($_SESSION['username'])) {
+    // if user login
+    $username = $_SESSION['username'];
+    echo 'Welcome, ' . $username . '!';
+} else {
+    // if user not login
+    header('Location: login.php');
+    exit;
+}
+?>
+
+<!-- 
+File name: invoiceSearch.php
+Description: This file is used for invoice search page, changed name from invoiceSearch.html
+Course & Section: CST8285 313
+Professor: Hala Own
+Author: Ryan Xu
+Date Created: 2024-03-22
+Last Date modified: 2024-03-29
+-->
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/invoiceSearch.css">
-    <script type="module" src="js/invoiceSearch.js" defer></script> 
+    <script type="module" src="js/invoiceSearch.js" defer></script>
     <title>Invoice Form</title>
 </head>
+
 <body>
     <header>
-        <h1 id="header">Invoice Information Search</h1>
+        <h1 id="header">Invoice/Transaction Search</h1>
         <nav>
-            <a href="index.html" class="nav-link  current" id="index">Home</a>
-            <a href="invoiceInput.html" class="nav-link" id="invoiceInput">InvoiceInput</a>
-            <a href="invoiceSearch.html" class="nav-link" id="invoiceSearch">InvoiceSearch</a>
-            <a href="login.html" class="nav-link" id="logout">Logout</a>
+            <ul>
+                <li><a href="index.php" class="nav-link" id="index">Home</a></li>
+                <li><a href="invoiceInput.php" class="nav-link" id="invoiceInput">InvoiceInput</a></li>
+                <li><a href="invoiceSearch.php" class="nav-link current" id="invoiceSearch">InvoiceSearch</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-link"><?php echo $username; ?></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">My Profile</a></li>
+                        <li><a href="logout.php">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
         </nav>
     </header>
     <main>
         <form action="php/fetchTransactions.php" method="post">
-            <fieldset >
+            <fieldset>
                 <legend>Filters</legend>
                 <div class="formPart" id="formPart1">
                     <div class="row-item" id="vendorname">
-                        <label for="vendorSelect">Select The Vendor</label>
+                        <label for="vendorSelect">Vendors</label>
                         <select id="vendorSelect" name="vendorSelect">
                             <option value="0">All Vendor</option>
                         </select>
                     </div>
-                    
+
                     <div class="row-item">
                         <label for="startDate">Start Date</label>
                         <input type="date" name="startDate" id="startDate">
                     </div>
-            
+
                     <div class="row-item">
                         <label for="endDate">End Date</label>
                         <input type="date" name="endDate" id="endDate">
                     </div>
-        
+
                     <div class="row-item">
                         <button type="button" id="search">Search</button>
-                        <button type="reset" id="reset">Reset</button>
-                    </div>  
+                        <button type="reset" class="warningButton" id="reset">Reset</button>
+                    </div>
                 </div>
             </fieldset>
             <fieldset>
@@ -78,15 +113,17 @@
                 </div>
             </fieldset>
         </form>
-    
     </main>
-     
     <footer>
+        <div>
+            <p>&copy; 2024 Family Expense Tracker. All rights reserved. </p>
+            <p>Coded by Ryan Xu & Yizhen Xu</p>
+        </div>
         <nav>
-            <a href="#header">Top of Page</a>
+            <a href="#header">Top of Page </a>
         </nav>
-        <p>Coded by Ryan Xu & Yizhen Xu</p>
     </footer>
 
 </body>
+
 </html>

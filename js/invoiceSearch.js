@@ -1,3 +1,11 @@
+// File name: invoiceSearch.js
+// Description: This file is JavaScript for invoiceSearch.php
+// Course & Section: CST8285 313
+// Professor: Hala Own
+// Author: Ryan Xu
+// Date Created: 2024-03-22
+// Last Date modified: 2024-03-29
+
 import { displayDateTime, newVendorInputWindow } from "./common.js";
 
 // =============================================================================
@@ -114,6 +122,7 @@ function transactionListTable(data) {
         let TransactionID = item["TransactionID"];
         viewButton.setAttribute("type", "button");
         viewButton.setAttribute("value", TransactionID);
+        viewButton.setAttribute("id", "button"+TransactionID);
         viewButton.textContent = "View";
         viewButton.addEventListener("click", (e) => {
           // Call the function to view the detail
@@ -167,7 +176,7 @@ function populateTransactionDetailList(data) {
   }
   table.appendChild(rowlabel);
 
-  // Traversal the data for data row
+  // Traversal the data for data row, as the data create a table row
   dataArray.forEach((item) => {
     // Create a tr element
     let row = document.createElement("tr");
@@ -300,7 +309,9 @@ function transactionDetailEditEvent() {
   } else {
 
     // update transactionDetails and products
-    updateTransactionDetail.call(self).then(updateReturnInfo => {
+    // save the 'selected' button
+    let selectedID = document.querySelector('.selected').children[8].children[0].id;
+      updateTransactionDetail.call(self).then(updateReturnInfo => {
       console.log(updateReturnInfo);
       console.log("this self for Save: ", self);
       previousNthElementSibling(self, 4).setAttribute("readonly", true);
@@ -310,7 +321,13 @@ function transactionDetailEditEvent() {
       self.setAttribute("class", "edit");
       self.textContent = "Edit";
       self.nextSibling.style.display = 'none';
-      transactionSearchEvent();
+      transactionSearchEvent().then((data) => {
+        console.log("selectedID =", selectedID);
+        document.getElementById(selectedID).parentElement.parentElement.classList.add('selected');
+      })
+      .catch((error) => {
+        console.error("Error occurred: ", error);
+      });
     }).catch(error => {
         console.error("Error occurred: ", error);
     });
@@ -351,27 +368,31 @@ function transactionDetailSearchEvent(TransactionID, row) {
 
 // This function is used for transaction search button
 function transactionSearchEvent() {
-  let VendorID = document.getElementById("vendorSelect").value;
-  let startDate = document.getElementById("startDate").value;
-  let endDate = document.getElementById("endDate").value;
-  let filterOptions = {
-    "VendorID": VendorID,
-    "startDate": startDate,
-    "endDate": endDate,
-  }; // dict object
-  // console.log("filterOptions for fetchTransactions: \n", filterOptions);
+  return new Promise((resolve, reject) => {
+    let VendorID = document.getElementById("vendorSelect").value;
+    let startDate = document.getElementById("startDate").value;
+    let endDate = document.getElementById("endDate").value;
+    let filterOptions = {
+      "VendorID": VendorID,
+      "startDate": startDate,
+      "endDate": endDate,
+    }; // dict object
 
-  let url = "php/fetchTransactions.php";
-  fetchTransaction(filterOptions, url, transactionListTable)
-    .then((data) => {
-      data = JSON.parse(data);
-      console.log("fetchTransactions result from php: \n", data);
-    })
-    .catch((error) => {
-      console.error("An error occurred:", error);
-    });
+    let url = "php/fetchTransactions.php";
+    fetchTransaction(filterOptions, url, transactionListTable)
+      .then((data) => {
+        data = JSON.parse(data);
+        console.log("fetchTransactions result from php: \n", data);
+        resolve(data); // Resolve with the parsed data
+      })
+      .catch((error) => {
+        console.error("An error occurred:", error);
+        reject(error); // Reject with the error object
+      });
+  });
 }
 
+// This function is used to update TransactionDetails table
 function updateTransactionDetail() {
   // console.log("this in updateTransactionDetail: ", this);
   return new Promise((resolve, reject) => {
@@ -431,6 +452,18 @@ document.getElementById("reset").addEventListener("click", function (event) {
     location.reload();
   }
 });
+
+// document.getElementById('logout').addEventListener('click', function() {
+//   // Redirect to logout.php when the button is clicked
+//   window.location.href = './php/logout.php';
+// });
+
+// document.addEventListener("click", function(event) {
+//   var logoutDropdown = document.getElementById("logout-dropdown");
+//   if (!event.target.closest("#logout") && logoutDropdown.style.display === "block") {
+//       logoutDropdown.style.display = "none";
+//   }
+// });
 
 window.onload = function () {
   fetchVendorOptions()

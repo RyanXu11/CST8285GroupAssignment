@@ -20,10 +20,19 @@
             $response = array('success' => true);
             echo json_encode($response);
         } catch (PDOException $e) {
-            echo 'Registration failed: ' . $e->getMessage();
+            $error = array(
+                "code" => 501, // User defined error code
+                "message" => 'Registration failed: ' . $e->getMessage()
+            );
+            echo json_encode($error);
+            
         }
     } else {
-        echo 'Invalid request method';
+        $error = array(
+            "code" => 405, // User defined error code
+            "message" => 'Invalid request method.'
+        );
+        echo json_encode($error);
     }
     
     close_database_connection($conn);

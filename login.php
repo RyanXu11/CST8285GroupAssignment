@@ -1,6 +1,16 @@
 <?php
     session_start();
 ?>
+<!-- 
+File name: login.php
+Description: This file is used for user login, name changed from login.html
+Course & Section: CST8285 313
+Professor: Hala Own
+Author: Yizhen Xu
+Date Created: 2024-03-11
+Last Date modified: 2024-03-29
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,11 +73,14 @@
   </div>
   </main>
   <footer>
-    <p> &copy; 2024 Family Expense Tracker. All rights reserved. Coded by Ryan Xu & Yizhen Xu</p>
-    <nav>
-        <a href="#header">Top of Page</a>
-    </nav>
-</footer>
+        <div>
+            <p> &copy; 2024 Family Expense Tracker. All rights reserved.</p>
+            <p> Coded by Ryan Xu & Yizhen Xu</p>
+        </div>
+        <nav>
+            <a href="#header">Top of Page</a>
+        </nav>
+    </footer>
 </body>
 </html>
 </body>

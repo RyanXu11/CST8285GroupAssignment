@@ -1,3 +1,11 @@
+/* File name: invoiceSearch.js
+Description: This file is used for invoiceSearch.php
+Course & Section: CST8285 313
+Professor: Hala Own
+Author: Ryan Xu
+Date Created: 2024-03-22
+Last Date modified: 2024-03-29 */
+
 #formPart1 {
     display: flex;
     justify-content: space-between;
@@ -8,7 +16,15 @@
     /* width: 30%; */
     padding: 5px;
     text-align: right;
-    flex: 1;
+    flex-grow: 1;
+}
+
+#vendorname{
+    flex-grow: 2;
+}
+
+#vendorSelect{
+    font-size: 1.2em;
 }
 
 #formPart2{
@@ -101,6 +117,7 @@ p.memory{
 }
 
 .selected {
-    border: 1px solid #21b7c5; /* 使用相同的边框颜色 */
-    background: #4eb8df; /* 使用浅一些的蓝色作为背景 */
+    border: 1px solid #21b7c5; 
+    background: #4eb8df; 
 }
+

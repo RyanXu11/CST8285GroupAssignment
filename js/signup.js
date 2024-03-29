@@ -252,7 +252,7 @@ function registerUser() {
                 alert("Signup successed!");
                 window.location.href="login.php";
             } else {
-                alert("Signup failed!");
+                alert("Signup failed! \n" + "Error Code: " + response.code + "\n"+ response.message);
             }
         };
       }

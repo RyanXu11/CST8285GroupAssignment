@@ -345,12 +345,13 @@ document.getElementById("existVendorBtn").addEventListener("click", function () 
         } else {
             updateVendor().then(updateReturnInfo => {
                 console.log(updateReturnInfo);
-                fetchVendorOptions().then(options => {
-                    console.log("Options: ", options);
-                    formState("existVendorSeleted");
-                }).catch(error => {
-                    console.error("Error occurred: ", error);
-                });
+                formState("existVendorSeleted");
+                // fetchVendorOptions().then(options => {
+                //     console.log("Options: ", options);
+                //     formState("existVendorSeleted");
+                // }).catch(error => {
+                //     console.error("Error occurred: ", error);
+                // });
             }).catch(error => {
                 console.error("Error occurred: ", error);
             });
@@ -364,10 +365,20 @@ document.getElementById("existVendorBtn").addEventListener("click", function () 
 document.getElementById("vendorEditCancelBtn").addEventListener("click", function () {
     let fields = ["address", "city", "province", "zip", "email", "phone", "gstno", "membership"];
     let elements = ["vendorP1", "vendorP2","vendorP3","vendorP4","vendorP5","vendorP6","vendorP7","vendorP8",]
-    for (let i=0; i<8; i++) {
+    console.log("vendorSelect value: ", document.getElementById("vendorSelect").value);
+    if (document.getElementById("vendorSelect").value==0){
+      for (let i=0; i<8; i++) {
+        document.getElementById(fields[i]).value = "";
+        formState("");
+      }
+    } else {
+      for (let i=0; i<8; i++) {
         document.getElementById(fields[i]).value = document.getElementById(elements[i]).textContent;
+      }
+      formState("existVendorSeleted");
     }
-    formState("existVendorSeleted");
+
+
 });
 
 // let childWindow;
@@ -416,7 +427,9 @@ function clearFieldset3() {
     let parentDiv = document.getElementById("fieldset3");
     let childDivs = parentDiv.children;
     let i = childDivs.length -1;
-    for ( i; i>=2; i--){
+    // the first child is legend, the second child is label, the third is the first item
+    for ( i; i>=3; i--){
+      console.log("childDivs[i] will be removed: ", childDivs[i]);
       parentDiv.removeChild(childDivs[i]);
     }
     document.getElementById("productName1").value="";
@@ -917,6 +930,7 @@ function insertTransactionDetail(TransactionID, ProductID, Price, Quantity) {
   });
 }
 
+// This function is used to 
 function traversalInvoicelist(TransactionID){
   // Get the Parent div
   let parentDiv = document.getElementById('fieldset3');
@@ -924,8 +938,8 @@ function traversalInvoicelist(TransactionID){
   // let childDivs = parentDiv.querySelectorAll(':scope > div');
   let childDivs = parentDiv.children;
   // console.log("childDivs", childDivs);
-  // From the second <div>, for the first <div> are labels
-  for(let i = 1; i < childDivs.length; i++) {
+  // From the second <div>, for the first is legend, the second <div> are labels
+  for(let i = 2; i < childDivs.length; i++) {
       // There're 7 sub-elements in each childDivs[i], the first is label, from the second
       // From the second childDivs, if not new product, get VendorProductId, if not get ProductID
       let isNewProduct = false;
@@ -940,11 +954,11 @@ function traversalInvoicelist(TransactionID){
       }
 
       // Get other values directly
-      ProductName = childDivs[i].children[2].children[0].value;
-      Quantity = childDivs[i].children[3].children[0].value;
-      Unit = childDivs[i].children[4].value;
-      Price = childDivs[i].children[5].children[0].value;
-      TaxType = childDivs[i].children[6].value;
+      let ProductName = childDivs[i].children[2].children[0].value;
+      let Quantity = childDivs[i].children[3].children[0].value;
+      let Unit = childDivs[i].children[4].value;
+      let Price = childDivs[i].children[5].children[0].value;
+      let TaxType = childDivs[i].children[6].value;
 
       console.log("ProductName = ", ProductName);
       console.log("Unit = ", Unit);
@@ -1014,7 +1028,7 @@ function formState(state){
   switch(state){
     case "newVendorInput":
       // vendorSelect element
-      document.getElementById('vendorSelect').disabled = true;
+      selectedVendor.disabled = true;
       // inputVendorName 
       document.getElementById("inputVendorName").style.display = "inline";
       document.getElementById("inputVendorName").value = "";
@@ -1040,6 +1054,8 @@ function formState(state){
       document.getElementById("inputVendorName").focus;
       break;
     case "existVendorSeleted":
+      // vendorSelect element
+      selectedVendor.disabled = false;
       // inputVendorName
       document.getElementById("inputVendorName").value = "";
       document.getElementById("inputVendorName").style.display = "none";
@@ -1065,6 +1081,8 @@ function formState(state){
       selectProduct.focus;
       break;
     case "existVendorEdit":
+      // vendorSelect element
+      selectedVendor.disabled = true;
       // inputVendorName
       document.getElementById("inputVendorName").value = selectedVendor.options[selectedVendor.selectedIndex].text;
       document.getElementById("inputVendorName").style.display = "inline";
@@ -1091,7 +1109,7 @@ function formState(state){
     break;
     default:   // default is the status after page loaded
       // vendorSelect element
-      document.getElementById('vendorSelect').disabled = false;
+      selectedVendor.disabled = false;
       // inputVendorName element
       document.getElementById("inputVendorName").style.display = "none";
       // newVendor Button

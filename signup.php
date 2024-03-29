@@ -66,13 +66,14 @@
                     <button type="submit">Sign-Up</button>
                     <button type="reset">Reset</button>
                 </div>
-
-    
             </form>
     </main>
  
     <footer>
-        <p> &copy; 2024 Family Expense Tracker. All rights reserved. Coded by Ryan Xu & Yizhen Xu</p>
+        <div>
+            <p> &copy; 2024 Family Expense Tracker. All rights reserved.</p>
+            <p> Coded by Ryan Xu & Yizhen Xu</p>
+        </div>
         <nav>
             <a href="#header">Top of Page</a>
         </nav>

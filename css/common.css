@@ -1,12 +1,13 @@
 body {
-    /* display: flex;
-    flex-direction: column; */
+    display: flex;
+    flex-direction: column;
     font-family: Arial, sans-serif;
     /* Other color: #ddd78d;   */
     background-color: #f4f4f4;
     padding: 0;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+    gap:5px;
 }
 
 header {
@@ -17,29 +18,36 @@ header {
     align-content: center;
     align-items: center;
     background-color:#FFFFFF;
-    color: #93a29b;
     margin: 0 auto;
     
+}
+
+header div{
+    /* margin-right: 0; */
+    display: flex;
+    width:100%;
+    margin-left: 0;
+    margin-top: 10px;
+    color:#333333;
+    align-content: space-between;
+}
+
+.left{
+    flex: 80%; 
+}
+
+.right {
+    flex: 20%; 
 }
 
 main {
     width: 70%;
     align-content: center;
-    /* margin-left: 15%; */
     margin: 0 auto;
-    /* padding: 20px; */
     background-color: #e3eefc;
-    height: 70vh;
+    /* height: 70vh; */
+    flex-grow: 1;
 }
-
-header h1{
-    /* margin-right: 0; */
-    width:100%;
-    margin-left: 0;
-    margin-top: 20px;
-    color:#333333;
-}
-
 
 nav {
     display: flex;
@@ -51,15 +59,13 @@ nav {
     /* margin-left: 40%; */
     margin-right: 0; 
     font-size: 12pt;
-    border-radius: 10px;
-    padding: 3px;
 }
 
 .nav-link {
     text-decoration: none;
     font-size: 12pt;
-    border-radius: 1px;
-    padding: 3px;
+    border-radius: 3px;
+    /* padding: 10px; */
     margin: 0 10px;
     color: #333333;
 }
@@ -89,24 +95,13 @@ a {
 form {
     display: flex;
     flex-direction: column;
-    background-color: ; //#fff;
-    padding: 10px;
-    border-radius: 5px;
+    /* background-color: #fff; */
+    background-color: #e3eefc;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    /* width: 80%; */
-    gap:5px;
+    height:100%;
 }
 
-.main {
-    display: grid;
-    max-width: 1600px;
-    grid-template-columns: 50% 50%;
-    gap: 10px 1px;
-    /* width: 70%; */
-    margin: 0 auto;
-    /* place-items: center; */
-    align-items: center;
-}
+
 .cell {
     text-align: center;
 }
@@ -163,7 +158,8 @@ button:disabled {
 
 /* The following are for footer. */
 footer {
-    /* position: fixed; */
+    /* position: absolute;
+    bottom: 0; */
     width: 70%;
     display: flex;
     justify-content: space-between;
@@ -172,6 +168,8 @@ footer {
     background-color:#FFFFFF;
     color: #93a29b;
     margin: 0 auto;
+    margin-top: auto;
+    flex-shrink: 0;
 }
 
 footer div {
@@ -190,6 +188,67 @@ footer nav {
     margin-left: auto;
     margin-right: auto;
 }
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    padding: 10px;
+    list-style: none;
+    /* top: 0; 将下拉菜单定位到触发元素的下方 */
+    left: 0;
+    width: auto;
+}
+
+#logout-dropdown::after {
+    content: "";
+    color:#005dda;
+    border: solid #000;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+    margin-left: 5px; /* 调整箭头与文字之间的间距 */
+    transform: rotate(45deg);
+}
+
+
+.dropdown-menu li {
+    margin-bottom: 5px;
+    display: block; /* every option in one line */
+    white-space: nowrap;
+}
+
+.dropdown-menu li:first-child {
+    margin-top: 5px;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+
+
+nav ul {
+    list-style: none; /* 隐藏列表项标记 */
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline-block; /* 将列表项水平排列 */
+}
+
+nav ul li ul {
+    display: none; /* 默认隐藏下拉菜单 */
+}
+
+nav ul li:hover ul {
+    display: block; /* 鼠标悬停时显示下拉菜单 */
+} */ */
 
 @media screen and (min-width: 800px) {
     .gridCourseDetail {

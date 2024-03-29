@@ -13,9 +13,11 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
 
     xhr.onload = function() {
         let response = JSON.parse(this.responseText);
+        console.log("response.success: ", response.success);
+        console.log("response.username: ", response.username);
         if (response.success) {
-            alert("Login successed!");
-            window.location.href="invoiceInput.html";
+            alert("Login successed. Welcome " + response.username + "!");
+            window.location.href="index.php";
         } else {
             alert("Login failed!");
         }
