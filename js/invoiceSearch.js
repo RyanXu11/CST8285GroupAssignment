@@ -122,11 +122,11 @@ function transactionListTable(data) {
         let TransactionID = item["TransactionID"];
         viewButton.setAttribute("type", "button");
         viewButton.setAttribute("value", TransactionID);
-        viewButton.setAttribute("id", "button"+TransactionID);
+        viewButton.setAttribute("id", "button" + TransactionID);
         viewButton.textContent = "View";
         viewButton.addEventListener("click", (e) => {
           // Call the function to view the detail
-          e.preventDefault();  //prevent the form from submitting normally
+          e.preventDefault(); //prevent the form from submitting normally
           transactionDetailSearchEvent(TransactionID, row);
           console.log("View button clicked, TransactionID: ", TransactionID);
         });
@@ -190,8 +190,8 @@ function populateTransactionDetailList(data) {
 
       // Place the data into the cell
       let inputElement;
-      switch(column){
-        case "Row#": 
+      switch (column) {
+        case "Row#":
           cell.textContent = item["rowNumber"];
           break;
         case "TransactionDetailID":
@@ -200,7 +200,7 @@ function populateTransactionDetailList(data) {
           editSaveButton.setAttribute("type", "button");
           editSaveButton.setAttribute("class", "Edit");
           editSaveButton.setAttribute("value", TransactionDetailID);
-          editSaveButton.setAttribute("id", "EditButton"+TransactionDetailID);
+          editSaveButton.setAttribute("id", "EditButton" + TransactionDetailID);
           editSaveButton.textContent = "Edit";
           // cell = document.createElement('td');
           cell.appendChild(editSaveButton);
@@ -209,19 +209,19 @@ function populateTransactionDetailList(data) {
           cancelButton.setAttribute("type", "button");
           cancelButton.setAttribute("class", "cancel");
           cancelButton.setAttribute("value", TransactionDetailID);
-          cancelButton.setAttribute("id", "cancelButton"+TransactionDetailID);
-          cancelButton.style.display = 'none';
+          cancelButton.setAttribute("id", "cancelButton" + TransactionDetailID);
+          cancelButton.style.display = "none";
           cancelButton.textContent = "Cancel";
           // cell = document.createElement('td');
           cell.appendChild(cancelButton);
 
           let p1 = document.createElement("p");
           p1.setAttribute("class", "memory");
-          p1.textContent = item['Quantity'];
+          p1.textContent = item["Quantity"];
 
           let p2 = document.createElement("p");
           p2.setAttribute("class", "memory");
-          p2.textContent = item['Price'];
+          p2.textContent = item["Price"];
           cell.appendChild(p1);
           cell.appendChild(p2);
           break;
@@ -252,7 +252,7 @@ function populateTransactionDetailList(data) {
       transactionDetailEditEvent.call(event.target);
     });
 
-    cancelButton.addEventListener('click', (event) => {
+    cancelButton.addEventListener("click", (event) => {
       transactionDetailCancelEvent.call(event.target);
     });
     table.appendChild(row);
@@ -262,14 +262,14 @@ function populateTransactionDetailList(data) {
 }
 
 // This function is used to find the privous nth sibling which is used for "view"/"Edit" button
-// the element is 
+// the element is
 function previousNthElementSibling(element, n) {
   console.log("previousNthElementSibling current element:", element);
   let currentSibling = element.parentNode.previousElementSibling;
-  
+
   while (currentSibling && n > 1) {
-      currentSibling = currentSibling.previousElementSibling;
-      n--;
+    currentSibling = currentSibling.previousElementSibling;
+    n--;
   }
   currentSibling = currentSibling.children[0];
   return currentSibling;
@@ -277,26 +277,30 @@ function previousNthElementSibling(element, n) {
 
 // this funciton is used for Cancel button Event
 function transactionDetailCancelEvent() {
-  this.previousElementSibling.textContent = 'Edit';
-  this.previousElementSibling.setAttribute("class",'edit');
-  this.style.display = 'none';
+  this.previousElementSibling.textContent = "Edit";
+  this.previousElementSibling.setAttribute("class", "edit");
+  this.style.display = "none";
   previousNthElementSibling(this, 4).setAttribute("readonly", true);
   previousNthElementSibling(this, 4).classList.remove("editable");
-  previousNthElementSibling(this, 2).removeAttribute("readonly",true);
+  previousNthElementSibling(this, 2).removeAttribute("readonly", true);
   previousNthElementSibling(this, 2).classList.remove("editable");
   previousNthElementSibling(this, 4).value = this.nextSibling.textContent;
-  previousNthElementSibling(this, 2).value = this.nextSibling.nextSibling.textContent;
+  previousNthElementSibling(this, 2).value =
+    this.nextSibling.nextSibling.textContent;
 }
 
 // This function is used for transactionDetails Save button
 function transactionDetailEditEvent() {
   let TransactionDetailID = this.value;
   let self = this;
-  console.log("TransactionDetailID in transactionDetailEditEvent: ", TransactionDetailID);
+  console.log(
+    "TransactionDetailID in transactionDetailEditEvent: ",
+    TransactionDetailID
+  );
   // console.log("element this: ", this);
   // console.log("element this.parentNode: ", this.parentNode);
   // console.log("element.previousNthElementSibling(this, 4): ", previousNthElementSibling(this, 4));
-  if ( this.textContent == "Edit") {
+  if (this.textContent == "Edit") {
     // "Quantity" is 4th previous sibling, "Unit" is 3rd previous sibling
     //  "Price" is 2nd previous sibling, "TaxType" is 1st previous sibling
     previousNthElementSibling(this, 4).removeAttribute("readonly");
@@ -305,34 +309,40 @@ function transactionDetailEditEvent() {
     previousNthElementSibling(this, 2).classList.add("editable");
     this.setAttribute("class", "save");
     this.textContent = "Save";
-    this.nextSibling.style.display = 'inline';
+    this.nextSibling.style.display = "inline";
   } else {
-
     // update transactionDetails and products
     // save the 'selected' button
-    let selectedID = document.querySelector('.selected').children[8].children[0].id;
-      updateTransactionDetail.call(self).then(updateReturnInfo => {
-      console.log(updateReturnInfo);
-      console.log("this self for Save: ", self);
-      previousNthElementSibling(self, 4).setAttribute("readonly", true);
-      previousNthElementSibling(self, 4).classList.remove("editable");
-      previousNthElementSibling(self, 2).removeAttribute("readonly",true);
-      previousNthElementSibling(self, 2).classList.remove("editable");
-      self.setAttribute("class", "edit");
-      self.textContent = "Edit";
-      self.nextSibling.style.display = 'none';
-      transactionSearchEvent().then((data) => {
-        console.log("selectedID =", selectedID);
-        document.getElementById(selectedID).parentElement.parentElement.classList.add('selected');
+    let selectedID =
+      document.querySelector(".selected").children[8].children[0].id;
+    updateTransactionDetail
+      .call(self)
+      .then((updateReturnInfo) => {
+        console.log(updateReturnInfo);
+        console.log("this self for Save: ", self);
+        previousNthElementSibling(self, 4).setAttribute("readonly", true);
+        previousNthElementSibling(self, 4).classList.remove("editable");
+        previousNthElementSibling(self, 2).removeAttribute("readonly", true);
+        previousNthElementSibling(self, 2).classList.remove("editable");
+        self.setAttribute("class", "edit");
+        self.textContent = "Edit";
+        self.nextSibling.style.display = "none";
+        transactionSearchEvent()
+          .then((data) => {
+            console.log("selectedID =", selectedID);
+            document
+              .getElementById(selectedID)
+              .parentElement.parentElement.classList.add("selected");
+          })
+          .catch((error) => {
+            console.error("Error occurred: ", error);
+          });
       })
       .catch((error) => {
         console.error("Error occurred: ", error);
       });
-    }).catch(error => {
-        console.error("Error occurred: ", error);
-    });
     alert("The data has been submitted!");
-    }
+  }
   // console.log("TransactionDetailID: ", TransactionDetailID);
 }
 
@@ -344,19 +354,19 @@ function transactionDetailSearchEvent(TransactionID, row) {
   // remove all "selected" class
   let rows = row.parentNode.getElementsByTagName("tr");
   for (let i = 0; i < rows.length; i++) {
-      rows[i].classList.remove("selected");
+    rows[i].classList.remove("selected");
   }
   row.classList.add("selected");
 
   let filterOptions = {
-    "TransactionID": TransactionID,
+    TransactionID: TransactionID,
   }; // dict object
   // console.log("filterOptions for fetchTransactions: \n", filterOptions);
   let url = "./server/fetchTransactionDetail.php";
 
   fetchTransaction(filterOptions, url, populateTransactionDetailList)
     // .then(response => response.json())
-    .then(data => {
+    .then((data) => {
       // console.log("fetchTransactions result from php: \n", data);
       data = JSON.parse(data);
       console.log("fetchTransactionDetails result from php: \n", data);
@@ -373,9 +383,9 @@ function transactionSearchEvent() {
     let startDate = document.getElementById("startDate").value;
     let endDate = document.getElementById("endDate").value;
     let filterOptions = {
-      "VendorID": VendorID,
-      "startDate": startDate,
-      "endDate": endDate,
+      VendorID: VendorID,
+      startDate: startDate,
+      endDate: endDate,
     }; // dict object
 
     let url = "./server/fetchTransactions.php";
@@ -396,63 +406,76 @@ function transactionSearchEvent() {
 function updateTransactionDetail() {
   // console.log("this in updateTransactionDetail: ", this);
   return new Promise((resolve, reject) => {
-      let Quantity = previousNthElementSibling(this, 4).value;
-      let Price = previousNthElementSibling(this, 2).value;
-      let TransactionDetailID = this.value;
-      // console.log("This: ", this);
-      // console.log("Quantity: ", Quantity);
+    let Quantity = previousNthElementSibling(this, 4).value;
+    let Price = previousNthElementSibling(this, 2).value;
+    let TransactionDetailID = this.value;
+    // console.log("This: ", this);
+    // console.log("Quantity: ", Quantity);
 
-      let data = {
-          'TransactionDetailID': TransactionDetailID,
-          'Quantity': Quantity,
-          'Price': Price,
-      };
-      console.log("data: ", data);
-      // change dict object "data" to JSON format "body" which will post to php
-      let body = JSON.stringify(data);
-      console.log("body: ", body);
+    let data = {
+      TransactionDetailID: TransactionDetailID,
+      Quantity: Quantity,
+      Price: Price,
+    };
+    console.log("data: ", data);
+    // change dict object "data" to JSON format "body" which will post to php
+    let body = JSON.stringify(data);
+    console.log("body: ", body);
 
-      fetch('./server/updateTransactionDetail.php', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json', },
-          body: body,
-      }).then(response => {
-          if (!response.ok) {
-              throw new Error('Network response was not ok');
-          }
-          return response.json(); 
-      }).then(data => {
-          // let updateRows = data;
-          console.log("Return from updateTransactionDetail:", data);
-          resolve(data);
-      }).catch(error => {
-          console.error('Error:', error);
-          reject(error);
-      });  
+    fetch("./server/updateTransactionDetail.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: body,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // let updateRows = data;
+        console.log("Return from updateTransactionDetail:", data);
+        resolve(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        reject(error);
+      });
   });
 }
-
 
 // For validate Quantity and Price
 // let numberErrorMsg = "❌ Invalid number.";
 // let defaultMSg = "";
-var parentElement = document.getElementById('fieldset3');
+const parentElement = document.getElementById("fieldset3");
 
 // Add event listener to the parent element to validate all sub elements of "quantity" and "price" during input
-parentElement.addEventListener("input", function(e) {
+parentElement.addEventListener("input", function (e) {
   // Check the <input> product name element
-  if(e.target && (e.target.classList.contains('transactionDetail'))) {
-      // "input" event
-      let value = e.target.value;
-      let negativeSign = value.startsWith('-') ? '-' : '';
-      let numbersAndDot = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
-      e.target.value = negativeSign + numbersAndDot;
+  if (e.target && e.target.classList.contains("transactionDetail")) {
+    // "input" event
+    let value = e.target.value;
+    let negativeSign = value.startsWith("-") ? "-" : "";
+    let numbersAndDot = value
+      .replace(/[^0-9.]/g, "")
+      .replace(/(\..*)\./g, "$1");
+    e.target.value = negativeSign + numbersAndDot;
   }
 });
 
-
-document.getElementById("search").addEventListener("click", function(e) {
-  e.preventDefault();  //prevent the form from submitting normally
+// Add query eventListener to all three filters and search button
+const parentElement2 = document.getElementById('formPart1'); 
+const filterConditions = parentElement2.querySelectorAll('.filterCondition'); 
+const queryButton = document.getElementById('search');
+filterConditions.forEach(condition => {
+  condition.addEventListener('change', function(e) {
+    e.preventDefault(); 
+    transactionSearchEvent();
+  });
+})
+queryButton.addEventListener("click", function (e) {
+  e.preventDefault(); //prevent the form from submitting normally
   transactionSearchEvent();
 });
 

@@ -19,7 +19,7 @@ Course & Section: CST8285 313
 Professor: Hala Own
 Author: Ryan Xu
 Date Created: 2024-03-22
-Last Date modified: 2024-03-29
+Last Date modified: 2024-03-31
 -->
 
 <!DOCTYPE html>
@@ -62,19 +62,19 @@ Last Date modified: 2024-03-29
                 <div class="formPart" id="formPart1">
                     <div class="row-item" id="vendorname">
                         <label for="vendorSelect">Vendors</label>
-                        <select id="vendorSelect" name="vendorSelect">
+                        <select class="filterCondition" id="vendorSelect" name="vendorSelect">
                             <option value="0">All Vendors</option>
                         </select>
                     </div>
 
                     <div class="row-item">
                         <label for="startDate">Start Date</label>
-                        <input type="date" name="startDate" id="startDate">
+                        <input type="date" class="filterCondition" name="startDate" id="startDate">
                     </div>
 
                     <div class="row-item">
                         <label for="endDate">End Date</label>
-                        <input type="date" name="endDate" id="endDate">
+                        <input type="date" class="filterCondition" name="endDate" id="endDate">
                     </div>
 
                     <div class="row-item">

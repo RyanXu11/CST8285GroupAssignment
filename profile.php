@@ -12,6 +12,16 @@ if (isset ($_SESSION['username'])) {
     exit;
 }
 ?>
+<!-- 
+File name: login.php
+Description: This file is used for user change email/username and reset password
+Course & Section: CST8285 313
+Professor: Hala Own
+Author: Ryan Xu
+Date Created: 2024-03-30
+Last Date modified: 2024-03-31
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

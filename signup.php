@@ -1,6 +1,17 @@
 <?php
     session_start();
 ?>
+
+<!-- 
+File name: signup.php
+Description: This file is used for new user signup, name changed from signup.html
+Course & Section: CST8285 313
+Professor: Hala Own
+Author: Yizhen Xu
+Date Created: 2024-03-27
+Last Date modified: 2024-03-31
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
