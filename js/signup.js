@@ -5,35 +5,35 @@ let pass2Input = document.getElementById("pass2");
 // let newsletterInput = document.getElementById('newsletter');
 let termsInput = document.getElementById("terms");
 
-// create paragraph to display the error Msg returented by vaildateEmail() function
+// create paragraph to display the error Msg returented by validateEmail() function
 // and assign this paragraph to the class warning to style the error MSg
 let emailError = document.createElement("p");
 emailError.setAttribute("class", "warning");
 //append the created element to the parent of email div
 document.querySelectorAll(".textfield")[0].append(emailError);
 
-// create paragraph to display the error Msg returented by vaildateLogin() function
+// create paragraph to display the error Msg returented by validateLogin() function
 // and assign this paragraph to the class warning to style the error MSg
 let loginError = document.createElement("p");
 loginError.setAttribute("class", "warning");
 //append the created element to the parent of check div
 document.querySelectorAll(".textfield")[1].append(loginError);
 
-// create paragraph to display the error Msg returented by vaildatePass() function
+// create paragraph to display the error Msg returented by validatePass() function
 // and assign this paragraph to the class warning to style the error MSg
 let passError = document.createElement("p");
 passError.setAttribute("class", "warning");
 //append the created element to the parent of check div
 document.querySelectorAll(".textfield")[2].append(passError);
 
-// create paragraph to display the error Msg returented by vaildatePass2() function
+// create paragraph to display the error Msg returented by validatePass2() function
 // and assign this paragraph to the class warning to style the error MSg
 let pass2Error = document.createElement("p");
 pass2Error.setAttribute("class", "warning");
 //append the created element to the parent of check div
 document.querySelectorAll(".textfield")[3].append(pass2Error);
 
-// create paragraph to display the error Msg returented by vaildateTerms() function
+// create paragraph to display the error Msg returented by validateTerms() function
 // and assign this paragraph to the class warning to style the error MSg
 let termsError = document.createElement("p");
 termsError.setAttribute("class", "warning");
@@ -41,18 +41,15 @@ termsError.setAttribute("class", "warning");
 document.querySelectorAll(".checkbox")[0].append(termsError);
 
 //define a global variables
-let emailErrorMsg =
-  "❌ Email address should be non-empty with the format xyx@xyz.xyz";
-let loginErrorMsg =
-  "❌ User name should be non-empty, and within 30 characters long.";
-let passErrorMsg =
-  "❌ Password should be at least 8 characters: 1 uppercase, 1 lowercase.";
+let emailErrorMsg = "❌ Email address should be non-empty with the format xyx@xyz.xyz";
+let loginErrorMsg = "❌ User name should be non-empty, and within 30 characters long.";
+let passErrorMsg =  "❌ Password should be at least 8 characters: 1 uppercase, 1 lowercase.";
 let pass2ErrorMsg = "❌ Please retype password.";
 let termsErrorMsg = "❌ Please accept the terms and conditions";
 let defaultMSg = "";
 
 //method to validate email
-function vaildateEmail() {
+function validateEmail() {
   let email = emailInput.value; // access the value of the email
   let regexp = /\S+@\S+\.\S+/; //reg. expression
 
@@ -66,7 +63,7 @@ function vaildateEmail() {
 }
 
 //method to validate login
-function vaildateLogin() {
+function validateLogin() {
   // console.log("loginInput:", loginInput);
   let login = loginInput.value; // access the value of the login (User Name)
   if (login.trim() === "" || login.length > 30) {
@@ -81,7 +78,7 @@ function vaildateLogin() {
 }
 
 //method to validate Password
-function vaildatePass() {
+function validatePass() {
   let pass = passInput.value; // access the value of the password
   let hasUpperCase = /[A-Z]/.test(pass);
   let hasLowerCase = /[a-z]/.test(pass);
@@ -97,7 +94,7 @@ function vaildatePass() {
 }
 
 //method to validate Password2
-function vaildatePass2() {
+function validatePass2() {
   let pass = passInput.value;
   let pass2 = pass2Input.value; // access the value of the Re-type password
   if (pass2.trim() === "" || pass2 !== pass) {
@@ -119,28 +116,28 @@ function validate() {
   let valid = true; //global validation
 
   //validate email
-  let emailValidation = vaildateEmail();
+  let emailValidation = validateEmail();
   if (emailValidation !== defaultMSg) {
     emailError.textContent = emailValidation;
     valid = false;
   }
 
   //validate login
-  let loginValidation = vaildateLogin();
+  let loginValidation = validateLogin();
   if (loginValidation !== defaultMSg) {
     loginError.textContent = loginValidation;
     valid = false;
   }
 
   //validate Password
-  let passValidation = vaildatePass();
+  let passValidation = validatePass();
   if (passValidation !== defaultMSg) {
     passError.textContent = passValidation;
     valid = false;
   }
 
   //validate Password2
-  let pass2Validation = vaildatePass2();
+  let pass2Validation = validatePass2();
   if (pass2Validation !== defaultMSg) {
     pass2Error.textContent = pass2Validation;
     valid = false;
@@ -173,7 +170,7 @@ function resetFormError() {
 // add event listner to the email if you entered correct email,the error paragraph will be empty
 emailInput.addEventListener("blur", () => {
   // arrow function
-  let x = vaildateEmail();
+  let x = validateEmail();
   if (x == defaultMSg) {
     emailError.textContent = defaultMSg;
   }
@@ -182,7 +179,7 @@ emailInput.addEventListener("blur", () => {
 // add event listner to the login if you entered correct User Name,the error paragraph will be empty
 loginInput.addEventListener("blur", () => {
   // arrow function
-  let x = vaildateLogin();
+  let x = validateLogin();
   if (x == defaultMSg) {
     loginError.textContent = defaultMSg;
   }
@@ -191,7 +188,7 @@ loginInput.addEventListener("blur", () => {
 // add event listner to the login if you entered correct Password,the error paragraph will be empty
 passInput.addEventListener("blur", () => {
   // arrow function
-  let x = vaildatePass();
+  let x = validatePass();
   if (x == defaultMSg) {
     passError.textContent = defaultMSg;
   }
@@ -200,7 +197,7 @@ passInput.addEventListener("blur", () => {
 // add event listner to the login if you Re-type correct Password,the error paragraph will be empty
 pass2Input.addEventListener("blur", () => {
   // arrow function
-  let x = vaildatePass2();
+  let x = validatePass2();
   if (x == defaultMSg) {
     pass2Error.textContent = defaultMSg;
   }
@@ -234,9 +231,9 @@ document.querySelector("form").addEventListener("submit", function(event) {
 
 function registerUser() {
     if (validate()) {
-        let username = document.getElementById('login').value;
-        let password = document.getElementById('pass').value;
-        let email = document.getElementById('email').value;
+        let username = loginInput.value;
+        let password = passInput.value;
+        let email = emailInput.value;
         let data = new FormData();
         data.append("username", username);
         data.append("password", password);   

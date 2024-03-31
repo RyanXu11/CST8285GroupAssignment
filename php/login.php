@@ -18,20 +18,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($user && password_verify($password, $user['password'])) {
             session_start();
+            $_SESSION['MemberID'] = $user['MemberID'];
             $_SESSION['username'] = $_POST['username'];
             header('Content-Type: application/json');
             $response = array('success' => true, 'username' => $_SESSION['username']);
             echo json_encode($response);
         } else {
-            http_response_code(401); // Unauthorized
-            echo json_encode(array('error' => 'Invalid username or password'));
+            // 200 returns success or error
+            http_response_code(200);
+            // return the JSON
+            echo json_encode(array('success' => false, 'error' => 'Invalid username or password'));
         }
+        
     } catch (PDOException $e) {
         http_response_code(500); // Internal server error
         echo json_encode(array('error' => 'Database error: ' . $e->getMessage()));
     }
 } else {
     http_response_code(405); // Method not allowed
-    echo json_encode(array('error' => 'Invalid request method'));
+    echo json_encode(array('error' => 'Method not allowed'));
 }
 ?>

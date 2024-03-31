@@ -20,6 +20,7 @@
             }
         }
     } catch (PDOException $e) {
-        die("Connection failure: " . $e->getMessage());
+        $response = array("error" => "Connection failure: " . $e->getMessage());
+        echo json_encode($response);
     }
 ?>

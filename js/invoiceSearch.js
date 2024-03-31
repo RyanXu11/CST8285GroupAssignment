@@ -331,7 +331,7 @@ function transactionDetailEditEvent() {
     }).catch(error => {
         console.error("Error occurred: ", error);
     });
-    alert("The data has been updated!");
+    alert("The data has been submitted!");
     }
   // console.log("TransactionDetailID: ", TransactionDetailID);
 }
@@ -434,8 +434,22 @@ function updateTransactionDetail() {
 
 
 // For validate Quantity and Price
-let numberErrorMsg = "❌ Invalid number.";
-let defaultMSg = "";
+// let numberErrorMsg = "❌ Invalid number.";
+// let defaultMSg = "";
+var parentElement = document.getElementById('fieldset3');
+
+// Add event listener to the parent element to validate all sub elements of "quantity" and "price" during input
+parentElement.addEventListener("input", function(e) {
+  // Check the <input> product name element
+  if(e.target && (e.target.classList.contains('transactionDetail'))) {
+      // "input" event
+      let value = e.target.value;
+      let negativeSign = value.startsWith('-') ? '-' : '';
+      let numbersAndDot = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+      e.target.value = negativeSign + numbersAndDot;
+  }
+});
+
 
 document.getElementById("search").addEventListener("click", function(e) {
   e.preventDefault();  //prevent the form from submitting normally

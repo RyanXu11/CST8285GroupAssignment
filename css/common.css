@@ -49,6 +49,54 @@ main {
     flex-grow: 1;
 }
 
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    padding: 10px;
+    list-style: none;
+    left: 0;
+    width: auto;
+}
+
+.dropdown-menu li {
+    margin-bottom: 5px;
+    display: block;     /* every option in one line */
+    white-space: nowrap;
+}
+
+.dropdown-menu li:first-child {
+    margin-top: 5px;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+
+nav ul {
+    list-style: none; /* hidden the ul mark */
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline-block; 
+}
+
+nav ul li ul {
+    display: none; 
+}
+
+nav ul li:hover ul {
+    display: block; 
+} 
+
 nav {
     display: flex;
     width: 100%;
@@ -56,7 +104,6 @@ nav {
     background-color: #FFFFFF;
     color: #93a29b;
     text-decoration: none;
-    /* margin-left: 40%; */
     margin-right: 0; 
     font-size: 12pt;
 }
@@ -65,7 +112,6 @@ nav {
     text-decoration: none;
     font-size: 12pt;
     border-radius: 3px;
-    /* padding: 10px; */
     margin: 0 10px;
     color: #333333;
 }
@@ -101,6 +147,9 @@ form {
     height:100%;
 }
 
+form.setup {
+    gap:15px;
+}
 
 .cell {
     text-align: center;
@@ -125,7 +174,7 @@ button {
 }
 
 button.warningButton{
-    width: auto;
+    /* width: auto; */
     background-color: red;
 }
 
@@ -135,26 +184,10 @@ button:disabled {
     border-color: #ccc; 
 }
 
-
 .warning{
     color: red;
     margin: 0;
 }
-
-/* Mobile styles */
-@media screen and (max-width: 600px) {
-    body {
-        background-color: lightblue;
-    }
-
-    header {
-        background-color: #333;
-        color: white;
-        padding: 10px;
-    }
-}
-
-
 
 /* The following are for footer. */
 footer {
@@ -189,69 +222,22 @@ footer nav {
     margin-right: auto;
 }
 
-.dropdown {
-    position: relative;
-}
-
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    background-color: #fff;
-    padding: 10px;
-    list-style: none;
-    /* top: 0; 将下拉菜单定位到触发元素的下方 */
-    left: 0;
-    width: auto;
-}
-
-#logout-dropdown::after {
-    content: "";
-    color:#005dda;
-    border: solid #000;
-    border-width: 0 2px 2px 0;
-    display: inline-block;
-    padding: 3px;
-    margin-left: 5px; /* 调整箭头与文字之间的间距 */
-    transform: rotate(45deg);
-}
-
-
-.dropdown-menu li {
-    margin-bottom: 5px;
-    display: block; /* every option in one line */
-    white-space: nowrap;
-}
-
-.dropdown-menu li:first-child {
-    margin-top: 5px;
-}
-
-.dropdown:hover .dropdown-menu {
-    display: block;
-}
-
-
-
-nav ul {
-    list-style: none; /* 隐藏列表项标记 */
-    padding: 0;
-    margin: 0;
-}
-
-nav ul li {
-    display: inline-block; /* 将列表项水平排列 */
-}
-
-nav ul li ul {
-    display: none; /* 默认隐藏下拉菜单 */
-}
-
-nav ul li:hover ul {
-    display: block; /* 鼠标悬停时显示下拉菜单 */
-} */ */
 
 @media screen and (min-width: 800px) {
     .gridCourseDetail {
         grid-column-gap: 50px;
+    }
+}
+
+/* Mobile styles */
+@media screen and (max-width: 600px) {
+    body {
+        background-color: lightblue;
+    }
+
+    header {
+        background-color: #333;
+        color: white;
+        padding: 10px;
     }
 }

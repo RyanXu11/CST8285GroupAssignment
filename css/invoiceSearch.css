@@ -101,11 +101,17 @@ table.list tr th {
 td input{
     border: none;
     height: 100%;
+    background-color: #e3eefc;
     box-sizing: border-box;
+    text-align: right;
 }
 
 input.editable {
     background-color: rgb(246, 158, 174);
+}
+
+input.transactionDetail {
+    width:50%;
 }
 
 button.save{

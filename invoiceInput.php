@@ -47,8 +47,8 @@ Last Date modified: 2024-03-29
                 <li class="dropdown">
                     <a href="#" class="nav-link"><?php echo $username; ?></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">My Profile</a></li>
-                        <li><a href="logout.php">Logout</a></li>
+                        <li><a href="profile.php">My Profile</a></li>
+                        <li><a href="./php/logout.php">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -67,7 +67,7 @@ Last Date modified: 2024-03-29
                     </div>
                     <div class="vendorName">
                         <!-- <label for="inputVendorName" id="inputVendorNameLabel" class="invisible">New Vendor Name</label> -->
-                        <input type="text" class="invisible" id="inputVendorName" placeholder="New Vendor">
+                        <input type="text" id="inputVendorName" placeholder="New Vendor">
                         <p class="warning" id="warning1"></p>
                     </div>
                 </div>
@@ -230,7 +230,7 @@ Last Date modified: 2024-03-29
                 </div>   -->
                 <div class="invoice-foot">
                     <button type="button" id="addInvoiceItem">Add Transaction Item</button>
-                    <button type="submit" id="submit">Submit</button>
+                    <button type="submit" id="submit">Submit Transaction</button>
                     <button type="reset" class="warningButton" id="reset">Reset</button>
                 </div>
             </fieldset>

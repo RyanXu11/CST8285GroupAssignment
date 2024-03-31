@@ -38,6 +38,16 @@
             if ($results === FALSE) {
                 throw new Exception("Failed to fetch results from database.");
             } else {
+                // Iterate through the results and adjust Quantity if Unit is empty or null
+                foreach ($results as &$row) {
+                    if (empty($row['Unit']) || is_null($row['Unit'])) {
+                        // Adjust Quantity
+                        $row['Quantity'] = intval($row['Quantity']);
+                    }
+                }
+                unset($row); // Unset reference to last element
+
+                // Encode adjusted results to JSON format and return           
                 return json_encode($results);
             }
         } catch (Exception $e) {

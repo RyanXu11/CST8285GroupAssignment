@@ -49,8 +49,8 @@ Last Date modified: 2024-03-29
                                 <?php echo $_SESSION['username']; ?>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">My Profile</a></li>
-                                <li><a href="logout.php">Logout</a></li>
+                                <li><a href="profile.php">My Profile</a></li>
+                                <li><a href="./php/logout.php">Logout</a></li>
                             </ul>
                         </li>
                     </ul>

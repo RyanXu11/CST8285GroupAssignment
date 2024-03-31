@@ -1,3 +1,4 @@
+// This event listener is used for login in submit button
 document.getElementById('loginForm').addEventListener('submit', function(event) {
     event.preventDefault();
 

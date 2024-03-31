@@ -5,7 +5,6 @@ session_start();
 if (isset ($_SESSION['username'])) {
     // if user login
     $username = $_SESSION['username'];
-    echo 'Welcome, ' . $username . '!';
 } else {
     // if user not login
     header('Location: login.php');
@@ -37,7 +36,10 @@ Last Date modified: 2024-03-29
 
 <body>
     <header>
-        <h1 id="header">Invoice/Transaction Search</h1>
+        <div class="header">
+            <h1 id="header" class="left">Invoice/Transaction Search</h1>
+            <h2 class="right"><?php if (isset ($_SESSION['username'])) {echo 'Welcome, ' . $username . '!';}?></h2>
+        </div>
         <nav>
             <ul>
                 <li><a href="index.php" class="nav-link" id="index">Home</a></li>
@@ -46,8 +48,8 @@ Last Date modified: 2024-03-29
                 <li class="dropdown">
                     <a href="#" class="nav-link"><?php echo $username; ?></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">My Profile</a></li>
-                        <li><a href="logout.php">Logout</a></li>
+                        <li><a href="profile.php">My Profile</a></li>
+                        <li><a href="./php/logout.php">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -97,7 +99,7 @@ Last Date modified: 2024-03-29
                     </div>
                 </div>
             </fieldset>
-            <fieldset>
+            <fieldset id="fieldset3">
                 <legend>Trsanctions Detail</legend>
                 <div class="formPart" id="formPart3">
                     <div class="productLabel">
