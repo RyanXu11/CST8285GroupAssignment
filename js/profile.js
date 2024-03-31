@@ -203,7 +203,7 @@ let MemberID = document.getElementById("displayUsername").getAttribute("name");
 function fetchProfile() {
     console.log("MemberID: ", MemberID);
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", "php/getProfile.php?memberID=" + MemberID, true);
+    xhr.open("GET", "./server/getProfile.php?memberID=" + MemberID, true);
     // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     // displayDateTime();
     xhr.onreadystatechange = function () {
@@ -221,7 +221,6 @@ function fetchProfile() {
     xhr.send();
 }
 
-
 // This function is used to update user profile
 function updateProfile() {
     console.log("validateEmailLogin(): ", validateEmailLogin());
@@ -237,7 +236,7 @@ function updateProfile() {
         console.log("data in updateProfile: ", data);
 
         let xhr = new XMLHttpRequest();
-        xhr.open("POST", "./php/updateProfile.php", true);
+        xhr.open("POST", "./server/updateProfile.php", true);
         xhr.send(data);
 
         xhr.onload = function () {
@@ -265,7 +264,7 @@ function resetPassword() {
         console.log("data in resetPassword: ", data);
 
         let xhr = new XMLHttpRequest();
-        xhr.open("POST", "./php/resetPassword.php", true);
+        xhr.open("POST", "./server/resetPassword.php", true);
         xhr.send(data);
 
         xhr.onload = function () {

@@ -38,7 +38,7 @@ if (isset ($_SESSION['username'])) {
                     <a href="#" class="nav-link current" name=<?php echo $memberId; ?> id="displayUsername"><?php echo $username; ?></a>
                     <ul class="dropdown-menu">
                         <li><a href="profile.php">My Profile</a></li>
-                        <li><a href="./php/logout.php">Logout</a></li>
+                        <li><a href="./server/logout.php">Logout</a></li>
                     </ul>
                 </li>
             </ul>

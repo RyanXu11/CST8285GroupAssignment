@@ -9,7 +9,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     data.append("password", password);
 
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', './php/login.php', true);
+    xhr.open('POST', './server/login.php', true);
     xhr.send(data);
 
     xhr.onload = function() {

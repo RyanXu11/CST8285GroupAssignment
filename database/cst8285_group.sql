@@ -1,4 +1,10 @@
--- MySQL Workbench Forward Engineering
+-- This DATABASE is used for "Family Expense Tracker"
+-- There're 5 tables:
+--    familymembers: save the users' name, password, email
+--    vendors: save the vendors' information, such as Costco, Walmart
+--    products: save the products/services provided by vendors
+--    transactions: save the transactions/invoices head information
+--    transactionDetails: save the transaction details
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
@@ -210,7 +216,7 @@ VALUES(2, 6, 8.80, 2.056);
 
 -- Transaction 3
 INSERT INTO transactions (InvoiceNumber, TransactionDate, TransactionTime, Subtotal, TotalTax, Descriptions, MemberID, VendorID)
-VALUES("20231212121516", "2023-12-12", "12:15:16", 19.73, 0, "", 0, 1);
+VALUES("20231222121516", "2023-12-22", "12:15:16", 19.73, 0, "Preparation for Xmas", 0, 1);
 
 INSERT INTO transactionDetails (TransactionID, ProductID, Price, Quantity)
 VALUES(3, 1, 5.59, 2);
@@ -220,7 +226,7 @@ VALUES(3, 3, 8.55, 1);
 
 -- Transaction 4
 INSERT INTO transactions (InvoiceNumber, TransactionDate, TransactionTime, Subtotal, TotalTax, Descriptions, MemberID, VendorID)
-VALUES("2024010512121516", "2024-01-05", "12:15:16", 33.71, 0, "", 0, 1);
+VALUES("2024010212121516", "2024-01-02", "12:15:16", 33.71, 0, "First purchase in 2024, Happy new year!", 0, 1);
 
 INSERT INTO transactionDetails (TransactionID, ProductID, Price, Quantity)
 VALUES(4, 1, 5.59, 2);

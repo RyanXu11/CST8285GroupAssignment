@@ -67,7 +67,7 @@ Last Date modified: 2024-03-29
 
       <div class="container">
         <span class="pass">Forgot <a href="#">password?</a></span>
-        <a href="signup.html">New User Signup</a>
+        <a href="signup.php">New User Signup</a>
       </div>
     </form>
   </div>

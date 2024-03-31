@@ -49,21 +49,21 @@ Last Date modified: 2024-03-29
                     <a href="#" class="nav-link"><?php echo $username; ?></a>
                     <ul class="dropdown-menu">
                         <li><a href="profile.php">My Profile</a></li>
-                        <li><a href="./php/logout.php">Logout</a></li>
+                        <li><a href="./server/logout.php">Logout</a></li>
                     </ul>
                 </li>
             </ul>
         </nav>
     </header>
     <main>
-        <form action="php/fetchTransactions.php" method="post">
+        <form>
             <fieldset>
                 <legend>Filters</legend>
                 <div class="formPart" id="formPart1">
                     <div class="row-item" id="vendorname">
                         <label for="vendorSelect">Vendors</label>
                         <select id="vendorSelect" name="vendorSelect">
-                            <option value="0">All Vendor</option>
+                            <option value="0">All Vendors</option>
                         </select>
                     </div>
 

@@ -240,7 +240,7 @@ function registerUser() {
         data.append("email", email);
     
         let xhr = new XMLHttpRequest();
-        xhr.open('POST', './php/signup.php', true);
+        xhr.open('POST', './server/signup.php', true);
         xhr.send(data);
     
         xhr.onload = function() {

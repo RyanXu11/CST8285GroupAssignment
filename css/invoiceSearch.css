@@ -5,6 +5,14 @@ Professor: Hala Own
 Author: Ryan Xu
 Date Created: 2024-03-22
 Last Date modified: 2024-03-29 */
+form {
+    justify-content: center;
+    align-items: stretch;
+}
+
+fieldset {
+    margin-bottom: 15px;
+}
 
 #formPart1 {
     display: flex;

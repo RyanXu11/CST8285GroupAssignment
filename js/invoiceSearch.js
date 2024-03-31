@@ -13,7 +13,7 @@ import { displayDateTime, newVendorInputWindow } from "./common.js";
 function fetchVendorOptions() {
   return new Promise((resolve, reject) => {
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", "php/getVendorName.php");
+    xhr.open("GET", "./server/getVendorName.php");
     xhr.onreadystatechange = function () {
       if (this.readyState === 4 && this.status === 200) {
         console.log("fetchVendorOptions: \n", this.responseText);
@@ -352,7 +352,7 @@ function transactionDetailSearchEvent(TransactionID, row) {
     "TransactionID": TransactionID,
   }; // dict object
   // console.log("filterOptions for fetchTransactions: \n", filterOptions);
-  let url = "php/fetchTransactionDetail.php";
+  let url = "./server/fetchTransactionDetail.php";
 
   fetchTransaction(filterOptions, url, populateTransactionDetailList)
     // .then(response => response.json())
@@ -378,7 +378,7 @@ function transactionSearchEvent() {
       "endDate": endDate,
     }; // dict object
 
-    let url = "php/fetchTransactions.php";
+    let url = "./server/fetchTransactions.php";
     fetchTransaction(filterOptions, url, transactionListTable)
       .then((data) => {
         data = JSON.parse(data);
@@ -412,7 +412,7 @@ function updateTransactionDetail() {
       let body = JSON.stringify(data);
       console.log("body: ", body);
 
-      fetch('./php/updateTransactionDetail.php', {
+      fetch('./server/updateTransactionDetail.php', {
           method: 'POST',
           headers: {'Content-Type': 'application/json', },
           body: body,
@@ -469,7 +469,7 @@ document.getElementById("reset").addEventListener("click", function (event) {
 
 // document.getElementById('logout').addEventListener('click', function() {
 //   // Redirect to logout.php when the button is clicked
-//   window.location.href = './php/logout.php';
+//   window.location.href = './server/logout.php';
 // });
 
 // document.addEventListener("click", function(event) {

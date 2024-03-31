@@ -53,7 +53,7 @@ function setTransactionDateTime() {
 function fetchVendorOptions() {
   return new Promise((resolve, reject) => {
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", "php/getVendorName.php");
+    xhr.open("GET", "./server/getVendorName.php");
     xhr.onreadystatechange = function () {
       if (this.readyState === 4 && this.status === 200) {
         console.log("fetchVendorOptions: \n", this.responseText);
@@ -80,7 +80,7 @@ function fetchVendorOptions() {
 function fetchVendorInfo(vendorId) {
   let xhr = new XMLHttpRequest();
   // console.log("This is vendorId:\n", vendorId);
-  xhr.open("GET", "php/getVendorInfo.php?selectedValue=" + vendorId, true);
+  xhr.open("GET", "./server/getVendorInfo.php?selectedValue=" + vendorId, true);
   // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   // displayDateTime();
   xhr.onreadystatechange = function () {
@@ -120,7 +120,7 @@ function removeOptions(selectElement) {
 function fetchProductName(vendorId) {
   let xhr = new XMLHttpRequest();
   // console.log("This is vendorId:\n", vendorId);
-  xhr.open("GET", "php/getProductName.php?selectedValue=" + vendorId, true);
+  xhr.open("GET", "./server/getProductName.php?selectedValue=" + vendorId, true);
   // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   // displayDateTime();
   xhr.onreadystatechange = function () {
@@ -150,7 +150,7 @@ function fetchProductName(vendorId) {
 // function fetchProductName2(vendorId) {
 //   let xhr = new XMLHttpRequest();
 //   // console.log("This is vendorId:\n", vendorId);
-//   xhr.open("GET", "php/getProductName.php?selectedValue=" + vendorId, true);
+//   xhr.open("GET", "server/getProductName.php?selectedValue=" + vendorId, true);
 //   // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 //   // displayDateTime();
 //   xhr.onreadystatechange = function () {
@@ -180,7 +180,7 @@ function fetchProductInfo(productId) {
     let xhr = new XMLHttpRequest();
     let currentElement = document.getElementById(productId);
     let currentLineNumber = currentElement.parentElement.previousElementSibling;
-    xhr.open("GET","php/getProductInfo.php?selectedValue=" + currentElement.value, true);
+    xhr.open("GET","./server/getProductInfo.php?selectedValue=" + currentElement.value, true);
 
     xhr.onreadystatechange = function () {
       if (this.readyState === 4) {
@@ -239,7 +239,7 @@ function insertVendor() {
     let body = JSON.stringify(data);
     console.log("body: ", body);
 
-    fetch("./php/insertVendor.php", {
+    fetch("./server/insertVendor.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: body,
@@ -303,7 +303,7 @@ function updateVendor() {
     let body = JSON.stringify(data);
     console.log("body: ", body);
 
-    fetch("./php/updateVendor.php", {
+    fetch("./server/updateVendor.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: body,
@@ -740,7 +740,7 @@ function submitTransaction() {
     };
 
     let body = JSON.stringify(data);
-    let url = "./php/insertTransaction.php";
+    let url = "./server/insertTransaction.php";
 
     fetch(url, {
       method: "POST",
@@ -791,7 +791,7 @@ function insertProduct(
     let body = JSON.stringify(data);
     console.log("body: ", body);
 
-    let url = "./php/insertProduct.php";
+    let url = "./server/insertProduct.php";
 
     fetch(url, {
       method: "POST",
@@ -831,7 +831,7 @@ function insertTransactionDetail(TransactionID, ProductID, Price, Quantity) {
   let body = JSON.stringify(data);
   // console.log("body: ", body);
 
-  let url = "./php/insertTransactionDetail.php";
+  let url = "./server/insertTransactionDetail.php";
 
   // Solution 2
   fetch(url, {
