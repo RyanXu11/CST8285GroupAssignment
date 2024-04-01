@@ -23,6 +23,7 @@ DROP TABLE IF EXISTS `cst8285_group`.`FamilyMembers` ;
 
 CREATE TABLE IF NOT EXISTS `cst8285_group`.`FamilyMembers` (
   `MemberID` TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(50) NOT NULL,
   `FirstName` VARCHAR(50) NULL,
   `LastName` VARCHAR(50) NULL,
   `NickName` VARCHAR(50) NULL,
@@ -300,6 +301,6 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 -- CREATE PROJECT USER
 -- -----------------------------------------------------
--- CREATE USER IF NOT EXISTS 'xuUser'@'%' IDENTIFIED BY 'xuPassword123';
--- GRANT ALL PRIVILEGES ON cst8285_group.* TO 'xuUser'@'%';
--- FLUSH PRIVILEGES;
+CREATE USER IF NOT EXISTS 'xuUser'@'%' IDENTIFIED BY 'xuPassword123';
+GRANT ALL PRIVILEGES ON cst8285_group.* TO 'xuUser'@'%';
+FLUSH PRIVILEGES;

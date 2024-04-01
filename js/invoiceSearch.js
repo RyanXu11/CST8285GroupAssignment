@@ -468,15 +468,20 @@ parentElement.addEventListener("input", function (e) {
 const parentElement2 = document.getElementById('formPart1'); 
 const filterConditions = parentElement2.querySelectorAll('.filterCondition'); 
 const queryButton = document.getElementById('search');
+const formPart3 = document.getElementById("formPart3");
 filterConditions.forEach(condition => {
   condition.addEventListener('change', function(e) {
     e.preventDefault(); 
     transactionSearchEvent();
+    formPart3.innerHTML = ""; //Clear the result before new search
+    console.log("after filter changed: ", formPart3);
   });
 })
+
 queryButton.addEventListener("click", function (e) {
   e.preventDefault(); //prevent the form from submitting normally
   transactionSearchEvent();
+  formPart3.innerHTML = ""; //Clear the result before new search
 });
 
 // This listener is used to click "reset" button
