@@ -4,14 +4,20 @@ include_once 'functions.php';
 $conn = open_database_connection();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['MemberID'],$_POST['password'])) {
-        echo 'Missing POST parameters';
-        exit;
+    $json_data = file_get_contents('php://input');
+    $data = json_decode($json_data, true);
+
+    if (!isset($data['MemberID'], $data['password'])) {
+        $error = array("error" => 'Missing POST parameters');
+    } else {
+        // Access the parameters from the decoded JSON data
+        $MemberID = $data['MemberID'];
+        $password = $data['password'];
     }
 
     try {
-        $memberId = $_POST['MemberID'];
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $memberId = $MemberID;
+        $password = password_hash($password, PASSWORD_DEFAULT);
         $sql = "UPDATE familymembers SET password = :password WHERE MemberID = :MemberID";
         $stmt = $conn->prepare($sql);
         $stmt->execute([':password' => $password, ':MemberID' => $memberId]);

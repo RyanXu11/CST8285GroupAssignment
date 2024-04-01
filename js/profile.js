@@ -256,9 +256,10 @@ function updateProfile() {
 function resetPassword() {
     console.log("validatePassPass2(): ", validatePassPass2());
     if (validatePassPass2()) {
+        let password = passInput.value;
         let data = {
             MemberID: MemberID,
-            password: passInput.value,
+            password: password,
         };
         data = JSON.stringify(data);
         console.log("data in resetPassword: ", data);
